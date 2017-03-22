@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Redmine</string>
+    <string name="redmine">https://redmine.doctoroncall.ru</string>
+</resources>
