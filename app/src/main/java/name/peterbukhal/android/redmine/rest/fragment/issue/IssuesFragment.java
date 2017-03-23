@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.fragment;
+package name.peterbukhal.android.redmine.rest.fragment.issue;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -109,7 +109,7 @@ public final class IssuesFragment extends Fragment {
         public void onBindViewHolder(IssueViewHolder holder, int position) {
             final Issue issue = mIssues.get(position);
 
-            holder.mTvTitle.setText(issue.getSubject());
+            holder.mTvTitle.setText("#" + issue.getId() + " " + issue.getSubject());
             holder.mTvDescription.setText(Html.fromHtml(issue.getDescription()));
         }
 

@@ -1,11 +1,13 @@
 package name.peterbukhal.android.redmine.rest.service;
 
+import name.peterbukhal.android.redmine.rest.service.response.IssueResponse;
 import name.peterbukhal.android.redmine.rest.service.response.IssuesResponse;
 import name.peterbukhal.android.redmine.rest.service.response.ProjectsResponse;
 import name.peterbukhal.android.redmine.rest.service.response.TimeEntriesResponse;
 import name.peterbukhal.android.redmine.rest.service.response.UsersResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
  * Created by
@@ -17,6 +19,9 @@ public interface Redmine {
 
     @GET("/issues.json")
     Call<IssuesResponse> issues();
+
+    @GET("/issues/{id}.json")
+    Call<IssueResponse> issue(@Path("id") int id);
 
     @GET("/projects.json")
     Call<ProjectsResponse> projects();

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Redmine</string>
     <string name="redmine">https://redmine.doctoroncall.ru</string>
+    <string name="my_page">Моя страница</string>
+    <string name="projects">Проекты</string>
+    <string name="guide">Помощь</string>
 </resources>

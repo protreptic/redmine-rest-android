@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.fragment;
+package name.peterbukhal.android.redmine.rest.fragment.issue;
 
 import android.support.v4.app.Fragment;
 

@@ -26,7 +26,7 @@ final class RedmineAuthenticator implements Authenticator {
     public Request authenticate(Route route, Response response) throws IOException {
         return response.request()
                 .newBuilder()
-                .header("Authorization", Credentials.basic("dd6521eabc613b13d01061ee02ac8b60bb5ecbbb", ""))
+                .header("Authorization", Credentials.basic("b9bdab9aaf22aa9b5cbfc9071a34da8538913629", ""))
                 .build();
     }
 
