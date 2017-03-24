@@ -1,10 +1,16 @@
 package name.peterbukhal.android.redmine.rest.activity;
 
+import android.accounts.Account;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -14,14 +20,20 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import name.peterbukhal.android.redmine.rest.R;
 import name.peterbukhal.android.redmine.rest.fragment.GuideFragment;
 import name.peterbukhal.android.redmine.rest.fragment.MyPageFragment;
-import name.peterbukhal.android.redmine.rest.fragment.ProjectsFragment;
+import name.peterbukhal.android.redmine.rest.fragment.project.ProjectsFragment;
 
+import static name.peterbukhal.android.redmine.rest.account.RedmineAccountManager.EXTRA_ACCOUNT;
 import static name.peterbukhal.android.redmine.rest.fragment.GuideFragment.TAG_GUIDE;
 import static name.peterbukhal.android.redmine.rest.fragment.MyPageFragment.TAG_MY_PAGE;
-import static name.peterbukhal.android.redmine.rest.fragment.ProjectsFragment.TAG_PROJECTS;
+import static name.peterbukhal.android.redmine.rest.fragment.project.ProjectsFragment.TAG_PROJECTS;
 
 /**
  * Created by
@@ -31,12 +43,26 @@ import static name.peterbukhal.android.redmine.rest.fragment.ProjectsFragment.TA
  */
 public final class MainActivity extends AppCompatActivity {
 
-    private AccountHeader generateAccountHeader() {
+    private Toolbar initToolbar() {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
+        return toolbar;
+    }
+
+    private AccountHeader initAccountHeader() {
         final ProfileDrawerItem defaultProfile =
                 new ProfileDrawerItem()
                         .withTextColorRes(R.color.colorPrimary)
-                        .withName("Mike Penz")
-                        .withEmail("mikepenz@gmail.com");
+                        .withName("")
+                        .withEmail(mAccount.name);
 
         return new AccountHeaderBuilder()
                 .withActivity(this)
@@ -44,7 +70,7 @@ public final class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-    private IDrawerItem[] generateDrawerItems() {
+    private IDrawerItem[] initDrawerItems() {
         return new IDrawerItem[] {
                 new PrimaryDrawerItem()
                         .withIdentifier(1)
@@ -60,26 +86,49 @@ public final class MainActivity extends AppCompatActivity {
                         .withName(R.string.guide) };
     }
 
+    private Account mAccount;
+
+    private void initProjects() {
+        final List<Map<String, String>> projects = new ArrayList<>();
+
+        final Map<String, String> init = new HashMap<>();
+        init.put("name", "Перейти к проекту...");
+
+        final Map<String, String> project1 = new HashMap<>();
+        project1.put("name", "project1");
+
+        final Map<String, String> project2 = new HashMap<>();
+        project2.put("name", "project2");
+
+        final Map<String, String> project3 = new HashMap<>();
+        project3.put("name", "project3");
+
+        projects.add(init);
+        projects.add(project1);
+        projects.add(project2);
+        projects.add(project3);
+
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner_nav);
+        spinner.setAdapter(new SimpleAdapter(this, projects, android.R.layout.simple_spinner_dropdown_item, new String[] { "name" }, new int[] { android.R.id.text1 }));
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAccount = getIntent().getParcelableExtra(EXTRA_ACCOUNT);
+
         setContentView(R.layout.a_main);
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        toolbar.setSubtitle("");
-
-        setSupportActionBar(toolbar);
 
         final Drawer drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withSavedInstance(savedInstanceState)
-                .withToolbar(toolbar)
+                .withToolbar(initToolbar())
+                .withSliderBackgroundColorRes(R.color.c2)
                 .withTranslucentStatusBar(false)
                 .withActionBarDrawerToggle(true)
-                .withAccountHeader(generateAccountHeader())
-                .addDrawerItems(generateDrawerItems())
+                .withAccountHeader(initAccountHeader())
+                .addDrawerItems(initDrawerItems())
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 
                     @Override
@@ -115,7 +164,16 @@ public final class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             drawer.setSelection(1);
+
+            initProjects();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+
+        return true;
     }
 
 }

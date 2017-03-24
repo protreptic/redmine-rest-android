@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_page">Моя страница</string>
+    <string name="projects">Проекты</string>
+    <string name="guide">Помощь</string>
+    <string name="password_restoration">Восстановление пароля</string>
+    <string name="username">Пользователь</string>
+    <string name="password">Пароль</string>
+    <string name="add_account">Новый пользователь</string>
+    <string name="add_account_description">Добавить учетную запись</string>
+    <string name="sign_in">Войти</string>
+</resources>
