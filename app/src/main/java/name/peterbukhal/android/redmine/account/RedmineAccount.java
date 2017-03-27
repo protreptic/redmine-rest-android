@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.account;
+package name.peterbukhal.android.redmine.account;
 
 import android.accounts.Account;
 

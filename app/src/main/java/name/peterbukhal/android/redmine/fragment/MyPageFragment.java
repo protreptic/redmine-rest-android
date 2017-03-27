@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.fragment;
+package name.peterbukhal.android.redmine.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import name.peterbukhal.android.redmine.rest.R;
+import name.peterbukhal.android.redmine.R;
 
 /**
  * Created by

@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.account;
+package name.peterbukhal.android.redmine.account;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import name.peterbukhal.android.redmine.rest.R;
+import name.peterbukhal.android.redmine.R;
 
 /**
  * TODO Доработать документацию

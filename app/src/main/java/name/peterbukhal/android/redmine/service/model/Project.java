@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.service.model;
+package name.peterbukhal.android.redmine.service.model;
 
 import com.google.gson.annotations.SerializedName;
 

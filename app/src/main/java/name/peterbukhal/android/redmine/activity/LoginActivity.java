@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.activity;
+package name.peterbukhal.android.redmine.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
@@ -19,8 +19,9 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import name.peterbukhal.android.redmine.rest.R;
-import name.peterbukhal.android.redmine.rest.account.RedmineAccountManager;
+
+import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.account.RedmineAccountManager;
 
 /**
  * Created by

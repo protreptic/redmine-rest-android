@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.account.auth;
+package name.peterbukhal.android.redmine.account.auth;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
@@ -11,12 +11,12 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
-import name.peterbukhal.android.redmine.rest.account.RedmineAccountManager;
-import name.peterbukhal.android.redmine.rest.activity.LoginActivity;
-import name.peterbukhal.android.redmine.rest.service.Redmine;
-import name.peterbukhal.android.redmine.rest.service.RedmineProvider;
-import name.peterbukhal.android.redmine.rest.service.model.User;
-import name.peterbukhal.android.redmine.rest.service.response.CurrentResponse;
+import name.peterbukhal.android.redmine.account.RedmineAccountManager;
+import name.peterbukhal.android.redmine.activity.LoginActivity;
+import name.peterbukhal.android.redmine.service.Redmine;
+import name.peterbukhal.android.redmine.service.RedmineProvider;
+import name.peterbukhal.android.redmine.service.model.User;
+import name.peterbukhal.android.redmine.service.response.CurrentResponse;
 import retrofit2.Response;
 
 /**

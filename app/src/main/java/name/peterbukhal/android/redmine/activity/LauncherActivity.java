@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.activity;
+package name.peterbukhal.android.redmine.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -14,14 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.io.IOException;
 
-import name.peterbukhal.android.redmine.rest.R;
-import name.peterbukhal.android.redmine.rest.account.RedmineAccount;
-import name.peterbukhal.android.redmine.rest.account.RedmineAccountManager;
+import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.account.RedmineAccount;
+import name.peterbukhal.android.redmine.account.RedmineAccountManager;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static name.peterbukhal.android.redmine.rest.account.RedmineAccountManager.EXTRA_ACCOUNT;
-import static name.peterbukhal.android.redmine.rest.account.RedmineAccountManager.PickUpAccountAdapter.ADD_ACCOUNT_ITEM_ID;
+import static name.peterbukhal.android.redmine.account.RedmineAccountManager.EXTRA_ACCOUNT;
+import static name.peterbukhal.android.redmine.account.RedmineAccountManager.PickUpAccountAdapter.ADD_ACCOUNT_ITEM_ID;
 
 /**
  * Created by

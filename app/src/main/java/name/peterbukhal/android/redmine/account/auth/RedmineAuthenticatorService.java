@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.account.auth;
+package name.peterbukhal.android.redmine.account.auth;
 
 import android.app.Service;
 import android.content.Intent;

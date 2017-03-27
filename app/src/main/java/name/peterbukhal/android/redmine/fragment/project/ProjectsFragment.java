@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.fragment.project;
+package name.peterbukhal.android.redmine.fragment.project;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,10 +17,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import name.peterbukhal.android.redmine.rest.R;
-import name.peterbukhal.android.redmine.rest.service.RedmineProvider;
-import name.peterbukhal.android.redmine.rest.service.model.Project;
-import name.peterbukhal.android.redmine.rest.service.response.ProjectsResponse;
+import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.service.RedmineProvider;
+import name.peterbukhal.android.redmine.service.model.Project;
+import name.peterbukhal.android.redmine.service.response.ProjectsResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
