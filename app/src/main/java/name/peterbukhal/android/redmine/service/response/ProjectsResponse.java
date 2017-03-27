@@ -1,9 +1,9 @@
-package name.peterbukhal.android.redmine.rest.service.response;
+package name.peterbukhal.android.redmine.service.response;
 
 import java.util.Collections;
 import java.util.List;
 
-import name.peterbukhal.android.redmine.rest.service.model.Project;
+import name.peterbukhal.android.redmine.service.model.Project;
 
 /**
  * Created by

@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.service.request;
+package name.peterbukhal.android.redmine.service.request;
 
 /**
  * Created by

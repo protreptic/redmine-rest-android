@@ -1,8 +1,8 @@
-package name.peterbukhal.android.redmine.rest;
+package name.peterbukhal.android.redmine;
 
 import android.app.Application;
 
-import name.peterbukhal.android.redmine.rest.service.RedmineProvider;
+import name.peterbukhal.android.redmine.service.RedmineProvider;
 
 /**
  * Created by

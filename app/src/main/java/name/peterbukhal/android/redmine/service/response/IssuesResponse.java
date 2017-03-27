@@ -1,10 +1,10 @@
-package name.peterbukhal.android.redmine.rest.service.response;
+package name.peterbukhal.android.redmine.service.response;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import name.peterbukhal.android.redmine.rest.service.model.Issue;
+import name.peterbukhal.android.redmine.service.model.Issue;
 
 /**
  * Created by

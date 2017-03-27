@@ -1,12 +1,12 @@
-package name.peterbukhal.android.redmine.rest.service;
+package name.peterbukhal.android.redmine.service;
 
-import name.peterbukhal.android.redmine.rest.service.response.CurrentResponse;
-import name.peterbukhal.android.redmine.rest.service.response.IssueResponse;
-import name.peterbukhal.android.redmine.rest.service.response.IssuesResponse;
-import name.peterbukhal.android.redmine.rest.service.response.ProjectsResponse;
-import name.peterbukhal.android.redmine.rest.service.response.TimeEntriesResponse;
-import name.peterbukhal.android.redmine.rest.service.response.UserResponse;
-import name.peterbukhal.android.redmine.rest.service.response.UsersResponse;
+import name.peterbukhal.android.redmine.service.response.CurrentResponse;
+import name.peterbukhal.android.redmine.service.response.IssueResponse;
+import name.peterbukhal.android.redmine.service.response.IssuesResponse;
+import name.peterbukhal.android.redmine.service.response.ProjectsResponse;
+import name.peterbukhal.android.redmine.service.response.TimeEntriesResponse;
+import name.peterbukhal.android.redmine.service.response.UserResponse;
+import name.peterbukhal.android.redmine.service.response.UsersResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

@@ -1,6 +1,6 @@
-package name.peterbukhal.android.redmine.rest.service.response;
+package name.peterbukhal.android.redmine.service.response;
 
-import name.peterbukhal.android.redmine.rest.service.model.User;
+import name.peterbukhal.android.redmine.service.model.User;
 
 /**
  * TODO Доработать документацию

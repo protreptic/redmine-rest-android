@@ -1,6 +1,6 @@
-package name.peterbukhal.android.redmine.rest.service.response;
+package name.peterbukhal.android.redmine.service.response;
 
-import name.peterbukhal.android.redmine.rest.service.model.Issue;
+import name.peterbukhal.android.redmine.service.model.Issue;
 
 /**
  * Created by

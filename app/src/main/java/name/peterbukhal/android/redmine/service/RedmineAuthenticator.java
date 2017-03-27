@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.rest.service;
+package name.peterbukhal.android.redmine.service;
 
 import android.content.Context;
 

@@ -1,8 +1,8 @@
-package name.peterbukhal.android.redmine.rest.service;
+package name.peterbukhal.android.redmine.service;
 
 import android.content.Context;
 
-import name.peterbukhal.android.redmine.rest.R;
+import name.peterbukhal.android.redmine.R;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
