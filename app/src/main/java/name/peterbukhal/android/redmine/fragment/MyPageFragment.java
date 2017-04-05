@@ -8,6 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.fragment.issue.CreatedByMeIssuesFragment;
+import name.peterbukhal.android.redmine.fragment.issue.MyIssuesFragment;
+import name.peterbukhal.android.redmine.fragment.issue.WatchedIssuesFragment;
+
+import static name.peterbukhal.android.redmine.fragment.issue.CreatedByMeIssuesFragment.TAG_CREATED_BY_ME_ISSUES;
+import static name.peterbukhal.android.redmine.fragment.issue.MyIssuesFragment.TAG_MY_ISSUES;
+import static name.peterbukhal.android.redmine.fragment.issue.WatchedIssuesFragment.TAG_WATCHED_ISSUES;
 
 /**
  * Created by
@@ -34,4 +41,17 @@ public final class MyPageFragment extends Fragment {
         return inflater.inflate(R.layout.f_my_page, container, false);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_content, MyIssuesFragment.newInstance(), TAG_MY_ISSUES)
+                    .add(R.id.fragment_content, WatchedIssuesFragment.newInstance(), TAG_WATCHED_ISSUES)
+                    .add(R.id.fragment_content, CreatedByMeIssuesFragment.newInstance(), TAG_CREATED_BY_ME_ISSUES)
+                    .commit();
+        }
+    }
 }

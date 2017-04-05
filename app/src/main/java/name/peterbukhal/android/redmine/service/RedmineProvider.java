@@ -8,6 +8,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static okhttp3.logging.HttpLoggingInterceptor.Level.BODY;
+
 /**
  * Created by
  *
@@ -23,8 +25,7 @@ public final class RedmineProvider {
                 .baseUrl(context.getString(R.string.redmine))
                 .client(new OkHttpClient.Builder()
                         .authenticator(new RedmineAuthenticator(context))
-                        .addInterceptor(new HttpLoggingInterceptor()
-                                .setLevel(HttpLoggingInterceptor.Level.BODY))
+                        .addInterceptor(new HttpLoggingInterceptor().setLevel(BODY))
                         .build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

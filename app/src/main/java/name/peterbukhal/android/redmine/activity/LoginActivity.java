@@ -34,8 +34,12 @@ public final class LoginActivity extends AppCompatActivity {
     private RedmineAccountManager mAccountManager;
     private RegistrationTask mAuthTask;
 
+    @BindView(R.id.servername)
+    EditText mEtServerName;
+
     @BindView(R.id.username)
     EditText mEtLogin;
+
     @BindView(R.id.password)
     EditText mEtPassword;
 

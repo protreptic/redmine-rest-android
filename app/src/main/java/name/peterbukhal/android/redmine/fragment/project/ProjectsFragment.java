@@ -25,6 +25,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static name.peterbukhal.android.redmine.fragment.project.ProjectFragment.TAG_PROJECT;
+
 /**
  * Created by
  *
@@ -119,6 +121,16 @@ public final class ProjectsFragment extends Fragment {
             if (!project.getDescription().isEmpty()) {
                 holder.mTvDescription.setText(Html.fromHtml(project.getDescription()));
             }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_content, ProjectFragment.newInstance(project), TAG_PROJECT)
+                            .commit();
+                }
+            });
         }
 
         @Override

@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,32 +18,35 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.service.IssuesRequester;
-import name.peterbukhal.android.redmine.service.RedmineProvider;
 import name.peterbukhal.android.redmine.service.model.Issue;
-import name.peterbukhal.android.redmine.service.model.User;
 import name.peterbukhal.android.redmine.service.response.IssuesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by
- *
- * @author Peter Bukhal petr.bukhal <at> doconcall.ru
- *         on 22.03.2017.
- */
-public final class IssuesFragment extends Fragment {
+import static name.peterbukhal.android.redmine.fragment.issue.IssueFragment.TAG_ISSUE;
 
-    public static final String TAG_ISSUES = "tag_issues";
+/**
+ * Created by petronic on 01.04.17.
+ */
+public final class MyIssuesFragment extends Fragment {
+
+    public static final String TAG_MY_ISSUES = "tag_my_issues";
 
     public static Fragment newInstance() {
         final Bundle args = new Bundle();
 
-        Fragment fragment = new IssuesFragment();
+        Fragment fragment = new MyIssuesFragment();
         fragment.setArguments(args);
 
         return fragment;
     }
+
+    @BindView(R.id.my_issues)
+    TextView mTvMyIssuesCount;
+
+    @BindView(R.id.all)
+    TextView mTvShowAll;
 
     @BindView(R.id.issues)
     RecyclerView mRvIssues;
@@ -54,7 +56,7 @@ public final class IssuesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final ViewGroup content = (ViewGroup) inflater.inflate(R.layout.f_issues, container, false);
+        final ViewGroup content = (ViewGroup) inflater.inflate(R.layout.f_my_issues, container, false);
 
         if (content != null) {
             mUnbinder = ButterKnife.bind(this, content);
@@ -77,21 +79,29 @@ public final class IssuesFragment extends Fragment {
         if (savedInstanceState == null) {
             new IssuesRequester()
                     .withAssignedToMe()
+                    .withIssueId()
+                    .withSort("updated_on", true)
+                    .withLimit(10)
                     .request()
                     .enqueue(new Callback<IssuesResponse>() {
 
-                @Override
-                public void onResponse(Call<IssuesResponse> call, Response<IssuesResponse> response) {
-                    if (response.isSuccessful()) {
-                        mIssues = response.body().getIssues();
-                        mIssuesAdapter.notifyDataSetChanged();
-                    }
-                }
+                        @Override
+                        public void onResponse(Call<IssuesResponse> call, Response<IssuesResponse> response) {
+                            if (!isAdded()) return;
 
-                @Override
-                public void onFailure(Call<IssuesResponse> call, Throwable t) {}
+                            if (response.isSuccessful()) {
+                                mIssues = response.body().getIssues();
+                                mIssuesAdapter.notifyDataSetChanged();
 
-            });
+                                mTvMyIssuesCount.setText(getString(R.string.my_issues, response.body().getTotalCount()));
+                                mTvShowAll.setVisibility(response.body().getTotalCount() > mIssues.size() ? View.VISIBLE : View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<IssuesResponse> call, Throwable t) {}
+
+                    });
         }
     }
 
@@ -114,8 +124,25 @@ public final class IssuesFragment extends Fragment {
         public void onBindViewHolder(IssueViewHolder holder, int position) {
             final Issue issue = mIssues.get(position);
 
-            holder.mTvTitle.setText("#" + issue.getId() + " " + issue.getSubject());
-            holder.mTvDescription.setText(Html.fromHtml(issue.getDescription()));
+            holder.mTvIssueNo.setText(issue.getId() + "");
+            holder.mTvProject.setText(issue.getProject().getName());
+            holder.mTvTracker.setText(issue.getTracker().getName());
+            holder.mTvSubjectAndStatus.setText(issue.getSubject() + " (" + issue.getStatus().getName() + ")");
+
+            holder.itemView.setClickable(true);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_content,
+                                    IssueFragment.newInstance(issue.getId()), TAG_ISSUE)
+                            .addToBackStack(TAG_ISSUE)
+                            .commit();
+                }
+
+            });
         }
 
         @Override
@@ -127,11 +154,17 @@ public final class IssuesFragment extends Fragment {
 
     static class IssueViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.title)
-        TextView mTvTitle;
+        @BindView(R.id.issue_no)
+        TextView mTvIssueNo;
 
-        @BindView(R.id.description)
-        TextView mTvDescription;
+        @BindView(R.id.project)
+        TextView mTvProject;
+
+        @BindView(R.id.tracker)
+        TextView mTvTracker;
+
+        @BindView(R.id.subject_and_status)
+        TextView mTvSubjectAndStatus;
 
         IssueViewHolder(View itemView) {
             super(itemView);
