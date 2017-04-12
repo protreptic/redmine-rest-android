@@ -9,32 +9,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.io.IOException;
-
 import name.peterbukhal.android.redmine.account.RedmineAccountManager;
 import name.peterbukhal.android.redmine.activity.LoginActivity;
-import name.peterbukhal.android.redmine.service.Redmine;
 import name.peterbukhal.android.redmine.service.RedmineProvider;
 import name.peterbukhal.android.redmine.service.model.User;
 import name.peterbukhal.android.redmine.service.response.CurrentResponse;
+import okhttp3.Credentials;
 import retrofit2.Response;
+
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * Created by
  *      petronic on 10.05.16.
  */
-final class RedmineAuthenticator extends AbstractAccountAuthenticator {
+public final class RedmineAuthenticator extends AbstractAccountAuthenticator {
 
     private final Context mContext;
     private final RedmineAccountManager mAccountManager;
-    private final Redmine mRedmine;
 
-    RedmineAuthenticator(Context context) {
+    public RedmineAuthenticator(Context context) {
         super(context);
 
         mContext = context;
         mAccountManager = RedmineAccountManager.get(context);
-        mRedmine = RedmineProvider.provide();
     }
 
     @Override
@@ -46,10 +45,11 @@ final class RedmineAuthenticator extends AbstractAccountAuthenticator {
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType,
                              String authTokenType, String[] requiredFeatures, Bundle options)
             throws NetworkErrorException {
-        Intent intent = new Intent(mContext, LoginActivity.class);
+        final Intent intent = new Intent(mContext, LoginActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
 
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
 
         return bundle;
@@ -64,6 +64,7 @@ final class RedmineAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse authResponse, final Account account,
                                String authTokenType, Bundle options) throws NetworkErrorException {
+        final String serverName = mAccountManager.getServer(account);
         final String token = mAccountManager.peekAuthToken(account);
 
         if (!token.equals("#")) {
@@ -75,8 +76,11 @@ final class RedmineAuthenticator extends AbstractAccountAuthenticator {
             return result;
         }
 
+        RedmineProvider.init(mContext, serverName);
+
         try {
-            final Response<CurrentResponse> response = mRedmine.currentUser().execute();
+            final Response<CurrentResponse> response =
+                    RedmineProvider.provide().currentUser(Credentials.basic(account.name, mAccountManager.getPassword(account))).execute();
 
             if (response.isSuccessful()) {
                 final User currentUser = response.body().getCurrentUser();
@@ -86,11 +90,14 @@ final class RedmineAuthenticator extends AbstractAccountAuthenticator {
                 result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
                 result.putString(AccountManager.KEY_AUTHTOKEN, currentUser.getApiKey());
 
+                mAccountManager.setDefaultAccount(account);
                 mAccountManager.setToken(account, currentUser.getApiKey());
+
+                name.peterbukhal.android.redmine.service.RedmineAuthenticator.sToken = currentUser.getApiKey();
 
                 return result;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             //
         }
 

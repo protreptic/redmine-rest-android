@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="24dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="match_parent"
@@ -29,7 +30,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textUri"
-                android:maxLength="64" />
+                android:maxWidth="400dp"
+                android:maxLength="64"
+                android:text="@string/redmine"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -43,7 +46,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:maxLength="64" />
+                android:maxWidth="400dp"
+                android:maxLength="64"
+                android:text="petr.bukhal@doconcall.ru" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -57,7 +62,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:maxLength="64" />
+                android:maxWidth="400dp"
+                android:maxLength="64"
+                android:text="9gvM3050" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
@@ -66,10 +73,5 @@
             android:layout_height="36dp"
             android:layout_gravity="end"
             android:text="@string/sign_in" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/restore_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>

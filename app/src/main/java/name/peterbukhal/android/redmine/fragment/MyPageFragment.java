@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.fragment.issue.CreatedByMeIssuesFragment;
 import name.peterbukhal.android.redmine.fragment.issue.MyIssuesFragment;
 import name.peterbukhal.android.redmine.fragment.issue.WatchedIssuesFragment;
+import name.peterbukhal.android.redmine.service.IssuesRequester;
 
 import static name.peterbukhal.android.redmine.fragment.issue.CreatedByMeIssuesFragment.TAG_CREATED_BY_ME_ISSUES;
 import static name.peterbukhal.android.redmine.fragment.issue.MyIssuesFragment.TAG_MY_ISSUES;
@@ -38,7 +41,25 @@ public final class MyPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.f_my_page, container, false);
+        final ViewGroup content = (ViewGroup) inflater.inflate(R.layout.f_my_page, container, false);
+
+        if (content != null) {
+
+        }
+
+        return content;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        getChildFragmentManager()
+                .beginTransaction()
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_MY_ISSUES))
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_WATCHED_ISSUES))
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_CREATED_BY_ME_ISSUES))
+                .commitAllowingStateLoss();
     }
 
     @Override
@@ -48,10 +69,11 @@ public final class MyPageFragment extends Fragment {
         if (savedInstanceState == null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_content, MyIssuesFragment.newInstance(), TAG_MY_ISSUES)
-                    .add(R.id.fragment_content, WatchedIssuesFragment.newInstance(), TAG_WATCHED_ISSUES)
-                    .add(R.id.fragment_content, CreatedByMeIssuesFragment.newInstance(), TAG_CREATED_BY_ME_ISSUES)
+                    .add(R.id.fragmentContent, MyIssuesFragment.newInstance(), TAG_MY_ISSUES)
+                    .add(R.id.fragmentContent, WatchedIssuesFragment.newInstance(), TAG_WATCHED_ISSUES)
+                    .add(R.id.fragmentContent, CreatedByMeIssuesFragment.newInstance(IssuesRequester.CREATED_BY_ME), TAG_CREATED_BY_ME_ISSUES)
                     .commit();
         }
     }
+
 }

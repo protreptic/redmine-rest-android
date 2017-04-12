@@ -12,7 +12,7 @@ public final class Utils {
             email = "default";
         }
 
-        return "http://www.gravatar.com/avatar/" + md5(email.toLowerCase().trim());
+        return "https://www.gravatar.com/avatar/" + md5(email.toLowerCase().trim()) + "?default=identicon&size=50";
     }
 
     private static String md5(String string) {

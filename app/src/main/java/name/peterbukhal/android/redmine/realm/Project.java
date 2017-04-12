@@ -1,30 +1,20 @@
 package name.peterbukhal.android.redmine.realm;
 
-import com.google.gson.annotations.SerializedName;
-
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class Project extends RealmObject {
 
+    @PrimaryKey
     private int id;
     private String name;
     private String identifier;
     private String description;
     private int status;
     private Project parent;
-
-    @SerializedName("is_public")
     private boolean isPublic;
-
-    @SerializedName("created_on")
     private String createdOn;
-
-    @SerializedName("updated_on")
     private String updatedOn;
-
-    public Project() {
-
-    }
 
     public int getId() {
         return id;

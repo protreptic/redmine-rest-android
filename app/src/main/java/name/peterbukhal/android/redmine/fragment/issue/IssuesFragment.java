@@ -18,10 +18,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.realm.Issue;
 import name.peterbukhal.android.redmine.service.IssuesRequester;
-import name.peterbukhal.android.redmine.service.RedmineProvider;
-import name.peterbukhal.android.redmine.service.model.Issue;
-import name.peterbukhal.android.redmine.service.model.User;
 import name.peterbukhal.android.redmine.service.response.IssuesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,7 +75,7 @@ public final class IssuesFragment extends Fragment {
         if (savedInstanceState == null) {
             new IssuesRequester()
                     .withAssignedToMe()
-                    .request()
+                    .build()
                     .enqueue(new Callback<IssuesResponse>() {
 
                 @Override

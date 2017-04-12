@@ -1,5 +1,8 @@
 package name.peterbukhal.android.redmine.service.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
-public final class User {
+public final class User implements Parcelable {
 
     private int id;
     private String login;
@@ -23,6 +26,17 @@ public final class User {
 
     @SerializedName("api_key")
     private String apiKey;
+
+    protected User(Parcel in) {
+        id = in.readInt();
+        login = in.readString();
+        firstname = in.readString();
+        lastname = in.readString();
+        mail = in.readString();
+        createdOn = in.readString();
+        lastLoginOn = in.readString();
+        apiKey = in.readString();
+    }
 
     public int getId() {
         return id;
@@ -55,5 +69,34 @@ public final class User {
     public String getApiKey() {
         return apiKey;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(login);
+        parcel.writeString(firstname);
+        parcel.writeString(lastname);
+        parcel.writeString(mail);
+        parcel.writeString(createdOn);
+        parcel.writeString(lastLoginOn);
+        parcel.writeString(apiKey);
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
 }

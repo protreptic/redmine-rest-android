@@ -16,9 +16,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.realm.Realm;
 import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.realm.Issue;
 import name.peterbukhal.android.redmine.service.IssuesRequester;
-import name.peterbukhal.android.redmine.service.model.Issue;
 import name.peterbukhal.android.redmine.service.response.IssuesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,16 +27,14 @@ import retrofit2.Response;
 
 import static name.peterbukhal.android.redmine.fragment.issue.IssueFragment.TAG_ISSUE;
 
-/**
- * Created by petronic on 01.04.17.
- */
-
 public final class CreatedByMeIssuesFragment extends Fragment {
 
     public static final String TAG_CREATED_BY_ME_ISSUES = "tag_created_by_me_issues";
+    public static final String ARG_REQUESTER = "arg_requester";
 
-    public static Fragment newInstance() {
+    public static Fragment newInstance(IssuesRequester requester) {
         final Bundle args = new Bundle();
+        args.putParcelable(ARG_REQUESTER, requester);
 
         Fragment fragment = new CreatedByMeIssuesFragment();
         fragment.setArguments(args);
@@ -70,6 +69,7 @@ public final class CreatedByMeIssuesFragment extends Fragment {
 
     private List<Issue> mIssues = new ArrayList<>();
     private IssuesAdapter mIssuesAdapter = new IssuesAdapter();
+    private IssuesRequester mRequester;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -77,32 +77,56 @@ public final class CreatedByMeIssuesFragment extends Fragment {
 
         mRvIssues.setAdapter(mIssuesAdapter);
 
-        if (savedInstanceState == null) {
-            new IssuesRequester()
-                    .withCreatedByMe()
-                    .withSort("updated_on", true)
-                    .withLimit(10)
-                    .request()
-                    .enqueue(new Callback<IssuesResponse>() {
-
-                        @Override
-                        public void onResponse(Call<IssuesResponse> call, Response<IssuesResponse> response) {
-                            if (!isAdded()) return;
-
-                            if (response.isSuccessful()) {
-                                mIssues = response.body().getIssues();
-                                mIssuesAdapter.notifyDataSetChanged();
-
-                                mTvMyIssuesCount.setText(getString(R.string.created_by_me_issues, response.body().getTotalCount()));
-                                mTvShowAll.setVisibility(response.body().getTotalCount() > mIssues.size() ? View.VISIBLE : View.GONE);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<IssuesResponse> call, Throwable t) {}
-
-                    });
+        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_REQUESTER)) {
+            mRequester = savedInstanceState.getParcelable(ARG_REQUESTER);
+        } else if (getArguments() != null && getArguments().containsKey(ARG_REQUESTER)) {
+            mRequester = getArguments().getParcelable(ARG_REQUESTER);
         }
+
+        if (savedInstanceState == null) {
+            //try (Realm realm = Realm.getDefaultInstance()) {
+                mIssues = Realm.getDefaultInstance().where(Issue.class)
+                        .findAllSorted("updatedOn");
+
+                if (mIssues.isEmpty()) {
+                    updateIssues();
+                } else {
+                    mTvMyIssuesCount.setText(getString(R.string.created_by_me_issues, mIssues.size()));
+                    mIssuesAdapter.notifyDataSetChanged();
+                }
+            //}
+        }
+    }
+
+    private void updateIssues() {
+        mRequester
+                .build()
+                .enqueue(new Callback<IssuesResponse>() {
+
+                    @Override
+                    public void onResponse(Call<IssuesResponse> call, Response<IssuesResponse> response) {
+                        if (!isAdded()) return;
+
+                        if (response.isSuccessful()) {
+                            mIssues = response.body().getIssues();
+
+                            try (Realm realm = Realm.getDefaultInstance()) {
+                                realm.beginTransaction();
+                                realm.copyToRealmOrUpdate(response.body().getIssues());
+                                realm.commitTransaction();
+                            }
+
+                            mIssuesAdapter.notifyDataSetChanged();
+
+                            mTvMyIssuesCount.setText(getString(R.string.created_by_me_issues, response.body().getTotalCount()));
+                            mTvShowAll.setVisibility(response.body().getTotalCount() > mIssues.size() ? View.VISIBLE : View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<IssuesResponse> call, Throwable t) {}
+
+                });
     }
 
     @Override

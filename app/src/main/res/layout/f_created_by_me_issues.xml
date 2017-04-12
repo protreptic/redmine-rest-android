@@ -29,7 +29,8 @@
             android:textStyle="bold"
             android:textColor="@color/accent"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <View

@@ -9,6 +9,7 @@ import name.peterbukhal.android.redmine.service.response.UserResponse;
 import name.peterbukhal.android.redmine.service.response.UsersResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -25,7 +26,7 @@ public interface Redmine {
     Call<UsersResponse> users();
 
     @GET("/users/current.json")
-    Call<CurrentResponse> currentUser();
+    Call<CurrentResponse> currentUser(@Header("Authorization") String authorization);
 
     @GET("/users/{id}.json")
     Call<UserResponse> user(@Path("id") int id);

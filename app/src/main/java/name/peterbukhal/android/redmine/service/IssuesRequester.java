@@ -1,5 +1,8 @@
 package name.peterbukhal.android.redmine.service;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import name.peterbukhal.android.redmine.service.model.Project;
 import name.peterbukhal.android.redmine.service.model.Tracker;
 import name.peterbukhal.android.redmine.service.model.User;
@@ -7,7 +10,20 @@ import name.peterbukhal.android.redmine.service.response.IssuesResponse;
 
 import static name.peterbukhal.android.redmine.service.RedmineProvider.provide;
 
-public final class IssuesRequester {
+public final class IssuesRequester implements Parcelable {
+
+    public static IssuesRequester CREATED_BY_ME =
+            new IssuesRequester()
+                    .withCreatedByMe()
+                    .withSort("updated_on", true)
+                    .withLimit(10);
+
+    public static IssuesRequester ASSIGNED_TO_ME =
+            new IssuesRequester()
+                    .withAssignedToMe()
+                    .withIssueId()
+                    .withSort("updated_on", true)
+                    .withLimit(10);
 
     private int mOffset = 0;
     private int mLimit = 0;
@@ -20,6 +36,24 @@ public final class IssuesRequester {
     private String mAssignedToId;
     private String mWatcherId;
     private String mAuthorId;
+
+    public IssuesRequester() {
+        // empty
+    }
+
+    protected IssuesRequester(Parcel in) {
+        mOffset = in.readInt();
+        mLimit = in.readInt();
+        mSort = in.readString();
+        mIssueIds = in.readString();
+        mProjectId = in.readString();
+        mSubProjectId = in.readString();
+        mTrackerId = in.readString();
+        mStatusIds = in.readString();
+        mAssignedToId = in.readString();
+        mWatcherId = in.readString();
+        mAuthorId = in.readString();
+    }
 
     public IssuesRequester withOffset(int offset) {
         mOffset = offset;
@@ -101,11 +135,45 @@ public final class IssuesRequester {
         return this;
     }
 
-    public retrofit2.Call<IssuesResponse> request() {
+    public retrofit2.Call<IssuesResponse> build() {
         return provide().issues(
                 mOffset, mLimit, mSort, mIssueIds,
                 mProjectId, mSubProjectId, mTrackerId, mWatcherId, mAuthorId,
                 mStatusIds, mAssignedToId, null);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mOffset);
+        parcel.writeInt(mLimit);
+        parcel.writeString(mSort);
+        parcel.writeString(mIssueIds);
+        parcel.writeString(mProjectId);
+        parcel.writeString(mSubProjectId);
+        parcel.writeString(mTrackerId);
+        parcel.writeString(mStatusIds);
+        parcel.writeString(mAssignedToId);
+        parcel.writeString(mWatcherId);
+        parcel.writeString(mAuthorId);
+    }
+
+    public static final Creator<IssuesRequester> CREATOR = new Creator<IssuesRequester>() {
+
+        @Override
+        public IssuesRequester createFromParcel(Parcel in) {
+            return new IssuesRequester(in);
+        }
+
+        @Override
+        public IssuesRequester[] newArray(int size) {
+            return new IssuesRequester[size];
+        }
+
+    };
 
 }

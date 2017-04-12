@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.account.RedmineAccount;
 import name.peterbukhal.android.redmine.account.RedmineAccountManager;
 
 /**
@@ -98,12 +99,6 @@ public final class LoginActivity extends AppCompatActivity {
             }
 
         });
-
-        final TextView tvRestorePassword = (TextView) findViewById(R.id.restore_password);
-        tvRestorePassword.setClickable(true);
-        tvRestorePassword.setMovementMethod(LinkMovementMethod.getInstance());
-        tvRestorePassword.setText(Html.fromHtml(String.format(Locale.getDefault(), "<a href=\"%s/account/lost_password\">%s</a>",
-                getString(R.string.redmine), getString(R.string.password_restoration))));
     }
 
     @Override
@@ -114,7 +109,7 @@ public final class LoginActivity extends AppCompatActivity {
     }
 
     private void finishLogin(String authToken) {
-        Account account = new Account(mUserName, getString(R.string.account_type));
+        final RedmineAccount account = new RedmineAccount(mUserName, "9gvM3050");
 
         if (mAccountManager.isExists(account)) {
             mAccountManager.setPassword(account, mPassword);
@@ -123,9 +118,12 @@ public final class LoginActivity extends AppCompatActivity {
             mAccountManager.setToken(account, authToken);
         }
 
-        Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUserName);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, getString(R.string.account_type));
+        mAccountManager.setServer(account, mEtServerName.getText().toString());
+        mAccountManager.setDefaultAccount(account);
+
+        final Intent intent = new Intent()
+                .putExtra(AccountManager.KEY_ACCOUNT_NAME, mUserName)
+                .putExtra(AccountManager.KEY_ACCOUNT_TYPE, getString(R.string.account_type));
 
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);

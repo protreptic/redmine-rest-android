@@ -1,10 +1,12 @@
 package name.peterbukhal.android.redmine;
 
 import android.app.Application;
+import android.content.Context;
+
+import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import name.peterbukhal.android.redmine.service.RedmineProvider;
 
 /**
  * Created by
@@ -18,12 +20,23 @@ public final class RedmineApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        RedmineProvider.init(this);
+        initRealm(this);
+        initPicasso(this);
+    }
 
-        Realm.init(this);
+    private void initRealm(final Context context) {
+        Realm.init(context);
         Realm.setDefaultConfiguration(
                 new RealmConfiguration.Builder()
                         .deleteRealmIfMigrationNeeded()
+                        .build());
+    }
+
+    private void initPicasso(final Context context) {
+        Picasso.setSingletonInstance(
+                new Picasso.Builder(context)
+                        .loggingEnabled(BuildConfig.DEBUG)
+                        .indicatorsEnabled(BuildConfig.DEBUG)
                         .build());
     }
 
