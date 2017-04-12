@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import name.peterbukhal.android.redmine.service.model.Issue;
+import name.peterbukhal.android.redmine.realm.Issue;
 
 /**
  * Created by

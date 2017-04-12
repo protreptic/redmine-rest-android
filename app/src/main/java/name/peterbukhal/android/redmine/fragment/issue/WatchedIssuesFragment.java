@@ -17,8 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.realm.Issue;
 import name.peterbukhal.android.redmine.service.IssuesRequester;
-import name.peterbukhal.android.redmine.service.model.Issue;
 import name.peterbukhal.android.redmine.service.response.IssuesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,9 +26,6 @@ import retrofit2.Response;
 
 import static name.peterbukhal.android.redmine.fragment.issue.IssueFragment.TAG_ISSUE;
 
-/**
- * Created by petronic on 01.04.17.
- */
 public final class WatchedIssuesFragment extends Fragment {
 
     public static final String TAG_WATCHED_ISSUES = "tag_watched_issues";
@@ -81,7 +78,7 @@ public final class WatchedIssuesFragment extends Fragment {
                     .withWatchedByMe()
                     .withSort("updated_on", true)
                     .withLimit(10)
-                    .request()
+                    .build()
                     .enqueue(new Callback<IssuesResponse>() {
 
                         @Override

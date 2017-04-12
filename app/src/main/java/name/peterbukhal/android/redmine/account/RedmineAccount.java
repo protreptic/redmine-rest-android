@@ -9,8 +9,29 @@ import android.accounts.Account;
  */
 public class RedmineAccount extends Account {
 
-    public RedmineAccount(String name) {
+    private String name;
+    private String password;
+
+    public RedmineAccount(String name, String password) {
         super(name, "org.redmine.account");
+
+        this.name = name;
+        this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

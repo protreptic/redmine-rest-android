@@ -9,6 +9,7 @@ import name.peterbukhal.android.redmine.service.response.UserResponse;
 import name.peterbukhal.android.redmine.service.response.UsersResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -62,7 +63,6 @@ public interface Redmine {
     Call<IssuesResponse> issues(
             @Query("offset") int offset,
             @Query("limit") int limit,
-
             @Query("sort") String sort,
             @Query("issue_id") String issueIds,
             @Query("project_id") String projectIds,

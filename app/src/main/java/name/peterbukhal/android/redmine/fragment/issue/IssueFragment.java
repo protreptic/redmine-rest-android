@@ -13,9 +13,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,6 +21,7 @@ import name.peterbukhal.android.redmine.service.model.Issue;
 import name.peterbukhal.android.redmine.service.model.User;
 import name.peterbukhal.android.redmine.service.response.IssueResponse;
 import name.peterbukhal.android.redmine.service.response.UserResponse;
+import name.peterbukhal.android.redmine.util.RoundedTransformation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -109,7 +107,7 @@ public final class IssueFragment extends Fragment implements SwipeRefreshLayout.
 
                     Picasso.with(getActivity())
                             .load(getGravatar(user.getMail()))
-                            .resize(50, 50)
+                            .transform(new RoundedTransformation(4, 0))
                             .into(mCreatorAvatar);
                 } else {
 

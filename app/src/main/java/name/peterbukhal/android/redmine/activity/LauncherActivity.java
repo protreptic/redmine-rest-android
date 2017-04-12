@@ -17,6 +17,8 @@ import java.io.IOException;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.account.RedmineAccount;
 import name.peterbukhal.android.redmine.account.RedmineAccountManager;
+import name.peterbukhal.android.redmine.service.RedmineAuthenticator;
+import name.peterbukhal.android.redmine.service.RedmineProvider;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -34,6 +36,10 @@ public final class LauncherActivity extends AppCompatActivity {
     private RedmineAccountManager mAccountManager;
 
     private void runApplication(Account account) {
+        RedmineProvider.init(this, mAccountManager.getServer(account));
+        //RedmineAuthenticator.sToken = mAccountManager.peekAuthToken(account);
+
+
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(EXTRA_ACCOUNT, account);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
@@ -87,7 +93,7 @@ public final class LauncherActivity extends AppCompatActivity {
                                 && bundle.containsKey(AccountManager.KEY_ACCOUNT_TYPE)) {
 
                             runApplication(new RedmineAccount(
-                                    bundle.getString(AccountManager.KEY_ACCOUNT_NAME)));
+                                    bundle.getString(AccountManager.KEY_ACCOUNT_NAME), "9gvM3050"));
                         }
                     }
                 } catch (OperationCanceledException e) {
@@ -111,7 +117,7 @@ public final class LauncherActivity extends AppCompatActivity {
                     Bundle bundle = future.getResult();
 
                     signIn(new RedmineAccount(
-                            bundle.getString(AccountManager.KEY_ACCOUNT_NAME)));
+                            bundle.getString(AccountManager.KEY_ACCOUNT_NAME), "9gvM3050"));
                 } catch (OperationCanceledException e) {
 
                 } catch (AuthenticatorException e) {
@@ -131,7 +137,7 @@ public final class LauncherActivity extends AppCompatActivity {
         Account defaultAccount = mAccountManager.getDefaultAccount();
 
         if (defaultAccount.name.equals("#")) {
-            pickUpAccountDialog();
+            signUp();
         } else {
             signIn(defaultAccount);
         }

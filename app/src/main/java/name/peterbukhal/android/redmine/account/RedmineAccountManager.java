@@ -73,8 +73,21 @@ public class RedmineAccountManager {
         mAccountManager.getAuthToken(account, account.type, Bundle.EMPTY, true, callback, null);
     }
 
+    public void refreshToken(Account account, String token) {
+        mAccountManager.invalidateAuthToken(mAccountType, token);
+        mAccountManager.getAuthToken(account, account.type, Bundle.EMPTY, true, null, null);
+    }
+
     public void setToken(Account account, String token) {
         mAccountManager.setAuthToken(account, account.type, token);
+    }
+
+    public String getServer(Account account) {
+        return mAccountManager.getUserData(account, "server_name");
+    }
+
+    public void setServer(Account account, String serverName) {
+        mAccountManager.setUserData(account, "server_name", serverName);
     }
 
     public String getGcmToken(Account account) {
@@ -91,6 +104,10 @@ public class RedmineAccountManager {
 
     public void setPassword(Account account, String password) {
         mAccountManager.setPassword(account, password);
+    }
+
+    public String getPassword(Account account) {
+        return mAccountManager.getPassword(account);
     }
 
     public List<Account> getAccounts() {
@@ -116,7 +133,7 @@ public class RedmineAccountManager {
                         .getSharedPreferences("main", Context.MODE_PRIVATE)
                         .getString(EXTRA_DEFAULT_ACCOUNT, "#");
 
-        return new RedmineAccount(accountName);
+        return new RedmineAccount(accountName, "9gvM3050");
     }
 
     private static final Object LOCK_OBJECT = new Object();
