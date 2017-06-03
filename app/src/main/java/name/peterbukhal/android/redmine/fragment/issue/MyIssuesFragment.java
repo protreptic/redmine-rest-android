@@ -19,14 +19,13 @@ import butterknife.Unbinder;
 import io.realm.Realm;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.realm.Issue;
-import name.peterbukhal.android.redmine.service.IssuesRequester;
-import name.peterbukhal.android.redmine.service.response.IssuesResponse;
+import name.peterbukhal.android.redmine.service.redmine.response.IssuesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static name.peterbukhal.android.redmine.fragment.issue.IssueFragment.TAG_ISSUE;
-import static name.peterbukhal.android.redmine.service.IssuesRequester.ASSIGNED_TO_ME;
+import static name.peterbukhal.android.redmine.service.redmine.IssuesRequester.ASSIGNED_TO_ME;
 
 public final class MyIssuesFragment extends Fragment {
 

@@ -1,5 +1,6 @@
 package name.peterbukhal.android.redmine.realm;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -22,6 +23,7 @@ public class Issue extends RealmObject {
 
     private String createdOn;
     private String updatedOn;
+    private RealmList<Issue> children;
 
     public int getId() {
         return id;
@@ -117,6 +119,14 @@ public class Issue extends RealmObject {
 
     public void setUpdatedOn(String updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public RealmList<Issue> getChildren() {
+        return children;
+    }
+
+    public void setChildren(RealmList<Issue> children) {
+        this.children = children;
     }
 
 }

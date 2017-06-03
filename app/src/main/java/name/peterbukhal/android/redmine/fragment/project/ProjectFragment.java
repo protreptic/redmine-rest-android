@@ -12,7 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
-import name.peterbukhal.android.redmine.service.model.Project;
+import name.peterbukhal.android.redmine.service.redmine.model.Project;
 
 public final class ProjectFragment extends Fragment {
 

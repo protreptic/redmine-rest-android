@@ -1,49 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="2dp">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/my_issues"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/my_issues"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/show_all"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/accent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone"/>
-    </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/expandable"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:background="@drawable/tint">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/c1" />
+                <name.peterbukhal.android.redmine.widget.TypefaceTextView
+                    android:id="@+id/my_issues"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/my_issues"
+                    android:textSize="15sp"
+                    app:typeface="Roboto-Medium" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/issues"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false" />
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_expand_more"
+                    android:background="@null" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/issues"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </android.support.v7.widget.LinearLayoutCompat>
 

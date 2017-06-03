@@ -9,4 +9,10 @@
     <string name="add_account">Новый пользователь</string>
     <string name="add_account_description">Добавить учетную запись</string>
     <string name="sign_in">Войти</string>
+    <string name="edit">Редактировать</string>
+    <string name="remove">Удалить</string>
+    <string name="labor_costs">Трудозатраты</string>
+
+    <string name="message_000001">Заявка успешно удалена</string>
+    <string name="message_000002">Удалить заявку?</string>
 </resources>

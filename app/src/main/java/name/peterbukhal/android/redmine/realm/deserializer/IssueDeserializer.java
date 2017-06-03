@@ -1,5 +1,7 @@
 package name.peterbukhal.android.redmine.realm.deserializer;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -8,6 +10,7 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
+import io.realm.RealmList;
 import name.peterbukhal.android.redmine.realm.Author;
 import name.peterbukhal.android.redmine.realm.Issue;
 import name.peterbukhal.android.redmine.realm.Priority;
@@ -34,8 +37,25 @@ public final class IssueDeserializer implements JsonDeserializer<Issue> {
         issue.setDoneRatio(jsonObject.get("done_ratio").getAsInt());
         issue.setCreatedOn(jsonObject.get("created_on").getAsString());
         issue.setUpdatedOn(jsonObject.get("updated_on").getAsString());
+        issue.setChildren(getChildren(context, jsonObject));
 
         return issue;
+    }
+
+    @NonNull
+    private RealmList<Issue> getChildren(JsonDeserializationContext context, JsonObject jsonObject) {
+        JsonElement temp = jsonObject.get("children");
+        RealmList<Issue> childrenList = new RealmList<>();
+
+        if (temp != null) {
+            for (JsonElement jsonElement : temp.getAsJsonArray()) {
+                childrenList.add(context.<Issue>deserialize(jsonElement, Issue.class));
+            }
+
+            return childrenList;
+        }
+
+        return childrenList;
     }
 
 }

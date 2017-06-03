@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Redmine</string>
-
     <string name="redmine">https://redmine.doctoroncall.ru</string>
     <string name="account_type">org.redmine.account</string>
     <string name="account_authority">org.redmine.account.authority</string>
@@ -10,4 +9,6 @@
     <string name="show_all">все</string>
     <string name="watched_issues">Отслеживаемые задачи (%1$d)</string>
     <string name="created_by_me_issues">Созданные задачи (%1$d)</string>
+    <string name="cancel">Отменить</string>
+    <string name="not_watched">Не следить</string>
 </resources>

@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,12 +21,15 @@ import butterknife.Unbinder;
 import io.realm.Realm;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.realm.Issue;
-import name.peterbukhal.android.redmine.service.IssuesRequester;
-import name.peterbukhal.android.redmine.service.response.IssuesResponse;
+import name.peterbukhal.android.redmine.service.redmine.IssuesRequester;
+import name.peterbukhal.android.redmine.service.redmine.response.IssuesResponse;
+import name.peterbukhal.android.redmine.util.AnimationListenerImpl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.support.v4.content.ContextCompat.getDrawable;
+import static android.view.animation.AnimationUtils.loadAnimation;
 import static name.peterbukhal.android.redmine.fragment.issue.IssueFragment.TAG_ISSUE;
 
 public final class CreatedByMeIssuesFragment extends Fragment {
@@ -45,8 +50,8 @@ public final class CreatedByMeIssuesFragment extends Fragment {
     @BindView(R.id.my_issues)
     TextView mTvMyIssuesCount;
 
-    @BindView(R.id.all)
-    TextView mTvShowAll;
+    @BindView(R.id.expandable)
+    ViewGroup mExpandablePanel;
 
     @BindView(R.id.issues)
     RecyclerView mRvIssues;
@@ -63,6 +68,55 @@ public final class CreatedByMeIssuesFragment extends Fragment {
 
             mRvIssues.setLayoutManager(new LinearLayoutManager(getContext()));
         }
+
+        mExpandablePanel.setOnClickListener(new View.OnClickListener() {
+
+            private boolean mIsToogled;
+
+            @Override
+            public void onClick(final View view) {
+                ImageButton expandIndicator = (ImageButton) view.findViewById(R.id.indicator);
+
+                if (mIsToogled) {
+                    Animation animation = loadAnimation(getActivity(), R.anim.expand_less);
+                    animation.setAnimationListener(new AnimationListenerImpl() {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mRvIssues.setVisibility(View.GONE);
+                        }
+                    });
+
+                    expandIndicator.clearAnimation();
+                    expandIndicator.setAnimation(animation);
+                    expandIndicator.animate();
+
+                    expandIndicator.setImageDrawable(getDrawable(getActivity(), R.drawable.ic_expand_less));
+
+                    mIsToogled = false;
+                } else {
+                    Animation animation = loadAnimation(getActivity(), R.anim.expand_out);
+                    animation.setAnimationListener(new AnimationListenerImpl() {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mRvIssues.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    view.clearAnimation();
+                    view.setAnimation(animation);
+                    view.animate();
+
+                    expandIndicator.clearAnimation();
+                    expandIndicator.setAnimation(loadAnimation(getActivity(), R.anim.expand_more));
+                    expandIndicator.animate();
+
+                    expandIndicator.setImageDrawable(getDrawable(getActivity(), R.drawable.ic_expand_more));
+
+                    mIsToogled = true;
+                }
+            }
+
+        });
 
         return content;
     }
@@ -119,7 +173,6 @@ public final class CreatedByMeIssuesFragment extends Fragment {
                             mIssuesAdapter.notifyDataSetChanged();
 
                             mTvMyIssuesCount.setText(getString(R.string.created_by_me_issues, response.body().getTotalCount()));
-                            mTvShowAll.setVisibility(response.body().getTotalCount() > mIssues.size() ? View.VISIBLE : View.GONE);
                         }
                     }
 

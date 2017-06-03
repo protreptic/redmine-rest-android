@@ -1,6 +1,5 @@
 package name.peterbukhal.android.redmine.activity;
 
-import android.accounts.Account;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -21,7 +20,6 @@ import name.peterbukhal.android.redmine.fragment.GuideFragment;
 import name.peterbukhal.android.redmine.fragment.MyPageFragment;
 import name.peterbukhal.android.redmine.fragment.project.ProjectsFragment;
 
-import static name.peterbukhal.android.redmine.account.RedmineAccountManager.EXTRA_ACCOUNT;
 import static name.peterbukhal.android.redmine.fragment.GuideFragment.TAG_GUIDE;
 import static name.peterbukhal.android.redmine.fragment.MyPageFragment.TAG_MY_PAGE;
 import static name.peterbukhal.android.redmine.fragment.project.ProjectsFragment.TAG_PROJECTS;
@@ -45,7 +43,7 @@ public final class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.redmine);
-            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(true);
         }
 
         return toolbar;
@@ -55,8 +53,8 @@ public final class MainActivity extends AppCompatActivity {
         final ProfileDrawerItem defaultProfile =
                 new ProfileDrawerItem()
                         .withTextColorRes(R.color.colorPrimary)
-                        .withName("")
-                        .withEmail(mAccount.name);
+                        .withName("Peter Bukhal")
+                        .withEmail("peter.bukhal@gmail.com");
 
         return new AccountHeaderBuilder()
                 .withActivity(this)
@@ -80,13 +78,9 @@ public final class MainActivity extends AppCompatActivity {
                         .withName(R.string.guide) };
     }
 
-    private Account mAccount;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAccount = getIntent().getParcelableExtra(EXTRA_ACCOUNT);
 
         setContentView(R.layout.a_main);
 
