@@ -3,22 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="48dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/tint">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/creator_avatar"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/watcher_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="48dp"
         tools:text="{наблюдатель}"
-        android:layout_toStartOf="@+id/watcher_remove"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:layout_toEndOf="@+id/creator_avatar" />
 
     <android.support.v7.widget.AppCompatImageButton
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_delete"
-        android:background="@color/tint"
+        android:background="@drawable/tint"
         android:id="@+id/watcher_remove" />
 </RelativeLayout>

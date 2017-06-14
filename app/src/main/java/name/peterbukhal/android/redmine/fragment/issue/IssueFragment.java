@@ -642,7 +642,14 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         public void onBindViewHolder(WatcherViewHolder holder, int position) {
             final Author watcher = watchers.get(position);
 
-            holder.mTvName.setText(watcher.getName());
+            Picasso.with(getActivity())
+                    .load(getGravatar(""))
+                    .transform(new RoundedTransformation(4, 0))
+                    .into(holder.avatar);
+
+            holder.mTvName.setText(new UserSpannable((AppCompatActivity) getActivity(), watcher));
+            holder.mTvName.setMovementMethod(LinkMovementMethod.getInstance());
+
             holder.mBtRemove.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -661,6 +668,9 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     }
 
     static class WatcherViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.creator_avatar)
+        ImageView avatar;
 
         @BindView(R.id.watcher_name)
         TextView mTvName;

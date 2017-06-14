@@ -24,7 +24,7 @@
                     android:id="@+id/creator_avatar"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true" />
@@ -194,11 +194,6 @@
                     android:id="@+id/history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/tint" />
             </LinearLayout>
 
             <LinearLayout
@@ -220,11 +215,6 @@
                     android:id="@+id/watchers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/tint" />
             </LinearLayout>
 
             <name.peterbukhal.android.redmine.widget.SourceCodeView
