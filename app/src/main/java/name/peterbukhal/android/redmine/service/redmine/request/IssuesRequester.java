@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.service.redmine;
+package name.peterbukhal.android.redmine.service.redmine.request;
 
 import android.os.Parcel;
 import android.os.Parcelable;

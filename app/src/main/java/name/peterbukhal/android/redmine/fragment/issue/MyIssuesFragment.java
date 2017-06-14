@@ -16,7 +16,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.realm.Realm;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.realm.Issue;
 import name.peterbukhal.android.redmine.service.redmine.response.IssuesResponse;
@@ -25,7 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static name.peterbukhal.android.redmine.fragment.issue.IssueFragment.TAG_ISSUE;
-import static name.peterbukhal.android.redmine.service.redmine.IssuesRequester.ASSIGNED_TO_ME;
+import static name.peterbukhal.android.redmine.service.redmine.request.IssuesRequester.ASSIGNED_TO_ME;
 
 public final class MyIssuesFragment extends Fragment {
 
@@ -39,12 +38,6 @@ public final class MyIssuesFragment extends Fragment {
 
         return fragment;
     }
-
-    @BindView(R.id.my_issues)
-    TextView mTvMyIssuesCount;
-
-    @BindView(R.id.all)
-    TextView mTvShowAll;
 
     @BindView(R.id.issues)
     RecyclerView mRvIssues;
@@ -75,13 +68,10 @@ public final class MyIssuesFragment extends Fragment {
         mRvIssues.setAdapter(mIssuesAdapter);
 
         if (savedInstanceState == null) {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                if (mIssues.isEmpty()) {
-                    updateIssues();
-                } else {
-                    mTvMyIssuesCount.setText(getString(R.string.my_issues, mIssues.size()));
-                    mIssuesAdapter.notifyDataSetChanged();
-                }
+            if (mIssues.isEmpty()) {
+                updateIssues();
+            } else {
+                mIssuesAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -97,9 +87,6 @@ public final class MyIssuesFragment extends Fragment {
                         if (response.isSuccessful()) {
                             mIssues = response.body().getIssues();
                             mIssuesAdapter.notifyDataSetChanged();
-
-                            mTvMyIssuesCount.setText(getString(R.string.my_issues, response.body().getTotalCount()));
-                            mTvShowAll.setVisibility(response.body().getTotalCount() > mIssues.size() ? View.VISIBLE : View.GONE);
                         }
                     }
 

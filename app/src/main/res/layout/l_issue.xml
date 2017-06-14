@@ -18,17 +18,20 @@
         android:id="@+id/project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="{project}" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tracker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="{tracker}" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/subject_and_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="{subject_and_status}" />
 </LinearLayout>

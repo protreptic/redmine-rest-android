@@ -70,6 +70,10 @@ public final class User implements Parcelable {
         return apiKey;
     }
 
+    public String getFullname() {
+        return getFirstname() +  " " + getLastname();
+    }
+
     @Override
     public int describeContents() {
         return 0;

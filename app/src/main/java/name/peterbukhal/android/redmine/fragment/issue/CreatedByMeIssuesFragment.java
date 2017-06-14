@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,40 +16,28 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.realm.Realm;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.realm.Issue;
-import name.peterbukhal.android.redmine.service.redmine.IssuesRequester;
+import name.peterbukhal.android.redmine.service.redmine.request.IssuesRequester;
 import name.peterbukhal.android.redmine.service.redmine.response.IssuesResponse;
-import name.peterbukhal.android.redmine.util.AnimationListenerImpl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.support.v4.content.ContextCompat.getDrawable;
-import static android.view.animation.AnimationUtils.loadAnimation;
 import static name.peterbukhal.android.redmine.fragment.issue.IssueFragment.TAG_ISSUE;
 
 public final class CreatedByMeIssuesFragment extends Fragment {
 
     public static final String TAG_CREATED_BY_ME_ISSUES = "tag_created_by_me_issues";
-    public static final String ARG_REQUESTER = "arg_requester";
 
-    public static Fragment newInstance(IssuesRequester requester) {
+    public static Fragment newInstance() {
         final Bundle args = new Bundle();
-        args.putParcelable(ARG_REQUESTER, requester);
 
         Fragment fragment = new CreatedByMeIssuesFragment();
         fragment.setArguments(args);
 
         return fragment;
     }
-
-    @BindView(R.id.my_issues)
-    TextView mTvMyIssuesCount;
-
-    @BindView(R.id.expandable)
-    ViewGroup mExpandablePanel;
 
     @BindView(R.id.issues)
     RecyclerView mRvIssues;
@@ -69,55 +55,6 @@ public final class CreatedByMeIssuesFragment extends Fragment {
             mRvIssues.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        mExpandablePanel.setOnClickListener(new View.OnClickListener() {
-
-            private boolean mIsToogled;
-
-            @Override
-            public void onClick(final View view) {
-                ImageButton expandIndicator = (ImageButton) view.findViewById(R.id.indicator);
-
-                if (mIsToogled) {
-                    Animation animation = loadAnimation(getActivity(), R.anim.expand_less);
-                    animation.setAnimationListener(new AnimationListenerImpl() {
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            mRvIssues.setVisibility(View.GONE);
-                        }
-                    });
-
-                    expandIndicator.clearAnimation();
-                    expandIndicator.setAnimation(animation);
-                    expandIndicator.animate();
-
-                    expandIndicator.setImageDrawable(getDrawable(getActivity(), R.drawable.ic_expand_less));
-
-                    mIsToogled = false;
-                } else {
-                    Animation animation = loadAnimation(getActivity(), R.anim.expand_out);
-                    animation.setAnimationListener(new AnimationListenerImpl() {
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            mRvIssues.setVisibility(View.VISIBLE);
-                        }
-                    });
-
-                    view.clearAnimation();
-                    view.setAnimation(animation);
-                    view.animate();
-
-                    expandIndicator.clearAnimation();
-                    expandIndicator.setAnimation(loadAnimation(getActivity(), R.anim.expand_more));
-                    expandIndicator.animate();
-
-                    expandIndicator.setImageDrawable(getDrawable(getActivity(), R.drawable.ic_expand_more));
-
-                    mIsToogled = true;
-                }
-            }
-
-        });
-
         return content;
     }
 
@@ -131,55 +68,28 @@ public final class CreatedByMeIssuesFragment extends Fragment {
 
         mRvIssues.setAdapter(mIssuesAdapter);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_REQUESTER)) {
-            mRequester = savedInstanceState.getParcelable(ARG_REQUESTER);
-        } else if (getArguments() != null && getArguments().containsKey(ARG_REQUESTER)) {
-            mRequester = getArguments().getParcelable(ARG_REQUESTER);
-        }
-
         if (savedInstanceState == null) {
-            //try (Realm realm = Realm.getDefaultInstance()) {
-                mIssues = Realm.getDefaultInstance().where(Issue.class)
-                        .findAllSorted("updatedOn");
+            new IssuesRequester()
+                    .withCreatedByMe()
+                    .withSort("updated_on", true)
+                    .build()
+                    .enqueue(new Callback<IssuesResponse>() {
 
-                if (mIssues.isEmpty()) {
-                    updateIssues();
-                } else {
-                    mTvMyIssuesCount.setText(getString(R.string.created_by_me_issues, mIssues.size()));
-                    mIssuesAdapter.notifyDataSetChanged();
-                }
-            //}
-        }
-    }
+                        @Override
+                        public void onResponse(Call<IssuesResponse> call, Response<IssuesResponse> response) {
+                            if (!isAdded()) return;
 
-    private void updateIssues() {
-        mRequester
-                .build()
-                .enqueue(new Callback<IssuesResponse>() {
-
-                    @Override
-                    public void onResponse(Call<IssuesResponse> call, Response<IssuesResponse> response) {
-                        if (!isAdded()) return;
-
-                        if (response.isSuccessful()) {
-                            mIssues = response.body().getIssues();
-
-                            try (Realm realm = Realm.getDefaultInstance()) {
-                                realm.beginTransaction();
-                                realm.copyToRealmOrUpdate(response.body().getIssues());
-                                realm.commitTransaction();
+                            if (response.isSuccessful()) {
+                                mIssues = response.body().getIssues();
+                                mIssuesAdapter.notifyDataSetChanged();
                             }
-
-                            mIssuesAdapter.notifyDataSetChanged();
-
-                            mTvMyIssuesCount.setText(getString(R.string.created_by_me_issues, response.body().getTotalCount()));
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<IssuesResponse> call, Throwable t) {}
+                        @Override
+                        public void onFailure(Call<IssuesResponse> call, Throwable t) {}
 
-                });
+            });
+        }
     }
 
     @Override
@@ -203,8 +113,8 @@ public final class CreatedByMeIssuesFragment extends Fragment {
 
             holder.mTvIssueNo.setText(issue.getId() + "");
             holder.mTvProject.setText(issue.getProject().getName());
-            holder.mTvTracker.setText(issue.getTracker().getName());
-            holder.mTvSubjectAndStatus.setText(issue.getSubject() + " (" + issue.getStatus().getName() + ")");
+            holder.mTvTracker.setText(issue.getTracker() != null ? issue.getTracker().getName() : "");
+            holder.mTvSubjectAndStatus.setText(issue.getTracker() != null ? (issue.getSubject() + " (" + issue.getStatus().getName() + ")") : "");
 
             holder.itemView.setClickable(true);
             holder.itemView.setOnClickListener(new View.OnClickListener() {

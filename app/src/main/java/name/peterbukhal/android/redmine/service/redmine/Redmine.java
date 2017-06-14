@@ -105,7 +105,9 @@ public interface Redmine {
     Call<ResponseBody> deleteIssue(@Path("id") int id);
 
     @POST("/issues/{id}/watchers.json")
-    Call<ResponseBody> addWatcher(@Query("user_id") int userId);
+    Call<ResponseBody> addWatcher(@Path("id") int id, @Query("user_id") int userId);
 
+    @DELETE("/issues/{id}/watchers/{user_id}.json")
+    Call<ResponseBody> deleteWatcher(@Path("id") int id, @Path("user_id") int userId);
 
 }

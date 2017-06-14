@@ -28,7 +28,7 @@ public final class Issue {
     @SerializedName("start_date")
     private String startDate;
 
-    @SerializedName("end_date")
+    @SerializedName("due_date")
     private String endDate;
 
     @SerializedName("done_ratio")
@@ -48,6 +48,12 @@ public final class Issue {
 
     @SerializedName("relations")
     private List<Relation> relations;
+
+    @SerializedName("watchers")
+    private List<Author> watchers;
+
+    @SerializedName("journals")
+    private List<JournalRecord> journals;
 
     public int getId() {
         return id;
@@ -123,6 +129,22 @@ public final class Issue {
         }
 
         return relations;
+    }
+
+    public List<Author> getWatchers() {
+        if (watchers == null) {
+            watchers = Collections.emptyList();
+        }
+
+        return watchers;
+    }
+
+    public List<JournalRecord> getJournals() {
+        if (journals == null) {
+            journals = Collections.emptyList();
+        }
+
+        return journals;
     }
 
 }

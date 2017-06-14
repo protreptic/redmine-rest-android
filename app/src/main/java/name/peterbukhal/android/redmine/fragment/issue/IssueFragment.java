@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,17 +31,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.realm.Realm;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.dialog.ConfirmationDialog;
 import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
-import name.peterbukhal.android.redmine.realm.Project;
+import name.peterbukhal.android.redmine.service.redmine.model.Author;
 import name.peterbukhal.android.redmine.service.redmine.model.Issue;
+import name.peterbukhal.android.redmine.service.redmine.model.JournalRecord;
 import name.peterbukhal.android.redmine.service.redmine.model.Relation;
 import name.peterbukhal.android.redmine.service.redmine.model.User;
 import name.peterbukhal.android.redmine.service.redmine.response.IssueResponse;
 import name.peterbukhal.android.redmine.service.redmine.response.UserResponse;
 import name.peterbukhal.android.redmine.util.RoundedTransformation;
+import name.peterbukhal.android.redmine.util.spans.DateSpannable;
+import name.peterbukhal.android.redmine.util.spans.UserSpannable;
+import name.peterbukhal.android.redmine.widget.SourceCodeView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,7 +117,46 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     }
 
     private void watchIssue() {
+        provide().addWatcher(mIssue.getId(), 0)
+                .enqueue(new Callback<ResponseBody>() {
 
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!isTransactionAllowed()) return;
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (!isTransactionAllowed()) return;
+
+            }
+
+        });
+    }
+
+    private void deleteWatcher(int userId) {
+        provide().deleteWatcher(mIssue.getId(), userId).enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!isTransactionAllowed()) return;
+
+                if (response.isSuccessful()) {
+                    fetchIssue(mIssue.getId());
+
+                    Toast.makeText(getActivity(), R.string.message_000003, Toast.LENGTH_LONG).show();
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (!isTransactionAllowed()) return;
+
+            }
+
+        });
     }
 
     private void deleteIssue() {
@@ -124,6 +170,8 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (!isTransactionAllowed()) return;
+
                                 if (response.isSuccessful()) {
                                     getActivity()
                                             .getSupportFragmentManager()
@@ -134,7 +182,10 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                             }
 
                             @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {}
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                if (!isTransactionAllowed()) return;
+
+                            }
 
                         });
             }
@@ -145,6 +196,9 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         });
         confirmationDialog.show();
     }
+
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout mSrlRefresh;
 
     @BindView(R.id.creator_avatar)
     ImageView mCreatorAvatar;
@@ -188,6 +242,21 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     @BindView(R.id.relations)
     RecyclerView mRvRelations;
 
+    @BindView(R.id.history_group)
+    ViewGroup mVgHistory;
+
+    @BindView(R.id.history)
+    RecyclerView mRvHistory;
+
+    @BindView(R.id.watchers_group)
+    ViewGroup mVgWatchers;
+
+    @BindView(R.id.watchers)
+    RecyclerView mRvWatchers;
+
+    @BindView(R.id.source_code)
+    SourceCodeView sourceCodeView;
+
     private Unbinder mUnbinder;
 
     @Nullable
@@ -198,8 +267,11 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         if (content != null) {
             mUnbinder = ButterKnife.bind(this, content);
 
+            mSrlRefresh.setOnRefreshListener(this);
             mRvChildren.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRvRelations.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRvWatchers.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
         return content;
@@ -228,6 +300,8 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (!isTransactionAllowed()) return;
+
                 if (response.isSuccessful()) {
                     final User user = response.body().getUser();
 
@@ -241,48 +315,42 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
             }
 
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {}
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                if (!isTransactionAllowed()) return;
 
-        });
-    }
-
-    private void persistIssue(final Issue issue) {
-        getRealm().executeTransaction(new Realm.Transaction() {
-
-            @Override
-            public void execute(Realm realm) {
-                name.peterbukhal.android.redmine.realm.Issue realmIssue = new name.peterbukhal.android.redmine.realm.Issue();
-                realmIssue.setId(issue.getId());
-
-                if (issue.getProject() != null) {
-                    Project project = new Project();
-                    project.setId(issue.getProject().getId());
-                    project.setDescription(issue.getProject().getDescription());
-
-                    realmIssue.setProject(project);
-                }
-
-                realm.copyToRealmOrUpdate(realmIssue);
             }
 
         });
     }
 
     private void fetchIssue(final int issueId) {
-        provide().issue(issueId, "children,relations")
+        sourceCodeView.setText("");
+
+        provide().issue(issueId, "children,relations,watchers,journals")
                 .enqueue(new Callback<IssueResponse>() {
 
             @Override
             public void onResponse(Call<IssueResponse> call, Response<IssueResponse> response) {
+                if (!isTransactionAllowed()) return;
+
                 if (response.isSuccessful()) {
                     mIssue = response.body().getIssue();
 
                     setTitle(getString(R.string.issue_no, issueId) + " " + mIssue.getSubject());
 
-                    persistIssue(mIssue);
+                    SpannableStringBuilder builder = new SpannableStringBuilder();
+                    builder.append("Добавил(а) ");
+                    builder.append(new UserSpannable((AppCompatActivity) getActivity(), mIssue.getAuthor()));
+                    builder.append(" ");
+                    builder.append(new DateSpannable(mIssue.getCreatedOn()));
+                    builder.append(" назад. ");
+                    builder.append("Обновлено ");
+                    builder.append(new DateSpannable(mIssue.getUpdatedOn()));
+                    builder.append(" назад.");
 
                     mTvIssueSubject.setText(mIssue.getSubject());
-                    mTvIssueCreation.setText(getString(R.string.issue_creation, mIssue.getAuthor().getName(), mIssue.getCreatedOn(), mIssue.getUpdatedOn()));
+                    mTvIssueCreation.setText(builder);
+                    mTvIssueCreation.setMovementMethod(LinkMovementMethod.getInstance());
                     mTvStatus.setText("Статус: " + mIssue.getStatus().getName());
                     mTvPriority.setText("Приоритет: " + mIssue.getPriority().getName());
                     mTvAssignTo.setText("Назначена: " + mIssue.getAssignedTo().getName());
@@ -305,14 +373,32 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                         mVgRelations.setVisibility(View.GONE);
                     }
 
-                    fetchUser(mIssue.getAuthor().getId());
-                } else {
+                    if (!mIssue.getJournals().isEmpty()) {
+                        mRvHistory.setAdapter(new HistoryAdapter(mIssue.getJournals()));
+                        mVgHistory.setVisibility(View.VISIBLE);
+                    } else {
+                        mVgHistory.setVisibility(View.GONE);
+                    }
 
+                    if (!mIssue.getWatchers().isEmpty()) {
+                        mRvWatchers.setAdapter(new WatchersAdapter(mIssue.getWatchers()));
+                        mVgWatchers.setVisibility(View.VISIBLE);
+                    } else {
+                        mVgWatchers.setVisibility(View.GONE);
+                    }
+
+                    fetchUser(mIssue.getAuthor().getId());
                 }
+
+                mSrlRefresh.setRefreshing(false);
             }
 
             @Override
-            public void onFailure(Call<IssueResponse> call, Throwable t) {}
+            public void onFailure(Call<IssueResponse> call, Throwable t) {
+                if (!isTransactionAllowed()) return;
+
+                mSrlRefresh.setRefreshing(false);
+            }
 
         });
     }
@@ -450,7 +536,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         public void onBindViewHolder(IssueViewHolder holder, int position) {
             final Relation relation = relations.get(position);
 
-            holder.mTvIssueNo.setText("#" + relation.getIssueToId());
+            holder.mTvIssueNo.setText(getString(R.string.issue_no, relation.getIssueToId()));
 
             holder.itemView.setClickable(true);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -471,6 +557,121 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         @Override
         public int getItemCount() {
             return relations.size();
+        }
+
+    }
+
+    private class HistoryAdapter extends RecyclerView.Adapter<HistoryRecordHolder> {
+
+        private List<JournalRecord> history = new ArrayList<>();
+
+        HistoryAdapter(List<JournalRecord> history) {
+            this.history.addAll(history);
+        }
+
+        @Override
+        public HistoryRecordHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new HistoryRecordHolder(LayoutInflater.from(getActivity())
+                    .inflate(R.layout.l_history_record, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(HistoryRecordHolder holder, int position) {
+            final JournalRecord journalRecord = history.get(position);
+
+            Picasso.with(getActivity())
+                    .load(getGravatar(""))
+                    .transform(new RoundedTransformation(4, 0))
+                    .into(holder.avatar);
+
+            SpannableStringBuilder builder = new SpannableStringBuilder();
+            builder.append("Обновлено ");
+            builder.append(new UserSpannable((AppCompatActivity) getActivity(), journalRecord.getUser()));
+            builder.append(" ");
+            builder.append(new DateSpannable(journalRecord.getCreated_on()));
+            builder.append(" назад.");
+
+            holder.title.setText(builder);
+            holder.title.setMovementMethod(LinkMovementMethod.getInstance());
+
+            try {
+                holder.notes.setText(Html.fromHtml(journalRecord.getNotes()));
+            } catch (Exception e) {
+                //
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return history.size();
+        }
+
+    }
+
+    private static class HistoryRecordHolder extends RecyclerView.ViewHolder {
+
+        ImageView avatar;
+        TextView title;
+        TextView notes;
+
+        public HistoryRecordHolder(View itemView) {
+            super(itemView);
+
+            avatar = (ImageView) itemView.findViewById(R.id.creator_avatar);
+            title = (TextView) itemView.findViewById(R.id.title);
+            notes = (TextView) itemView.findViewById(R.id.notes);
+        }
+
+    }
+
+    private class WatchersAdapter extends RecyclerView.Adapter<WatcherViewHolder> {
+
+        private List<Author> watchers = new ArrayList<>();
+
+        WatchersAdapter(List<Author> watchers) {
+            this.watchers.addAll(watchers);
+        }
+
+        @Override
+        public WatcherViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new WatcherViewHolder(LayoutInflater.from(getActivity())
+                    .inflate(R.layout.l_watcher, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(WatcherViewHolder holder, int position) {
+            final Author watcher = watchers.get(position);
+
+            holder.mTvName.setText(watcher.getName());
+            holder.mBtRemove.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    deleteWatcher(watcher.getId());
+                }
+
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return watchers.size();
+        }
+
+    }
+
+    static class WatcherViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.watcher_name)
+        TextView mTvName;
+
+        @BindView(R.id.watcher_remove)
+        ImageButton mBtRemove;
+
+        WatcherViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
 
     }

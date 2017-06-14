@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.realm.Issue;
-import name.peterbukhal.android.redmine.service.redmine.IssuesRequester;
+import name.peterbukhal.android.redmine.service.redmine.request.IssuesRequester;
 import name.peterbukhal.android.redmine.service.redmine.response.IssuesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;

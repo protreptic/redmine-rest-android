@@ -1,172 +1,236 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ScrollView
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/creator_avatar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="8dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/issue_subject"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="{Issue subject}"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:autoLink="all"
-                android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@+id/creator_avatar" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/issue_creation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="{Issue creation}"
-                android:textSize="14sp"
-                android:layout_below="@+id/issue_subject"
-                android:layout_alignStart="@+id/issue_subject"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="vertical">
+            android:padding="16dp">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/status"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/creator_avatar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/issue_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="{Issue subject}"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:autoLink="all"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@+id/creator_avatar" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/issue_creation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="{Issue creation}"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="8sp"
+                    android:layout_below="@+id/issue_subject"
+                    android:layout_alignStart="@+id/issue_subject"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="{статус}"/>
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/priority"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="{статус}"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/priority"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="{приоритет}" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/assign_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="{назначена}" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/start_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="{дата начала}" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/end_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="{дата завершения}" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/done_ratio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="{готовность}" />
+            </LinearLayout>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="{приоритет}" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/assign_to"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="{назначена}" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/start_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="{дата начала}" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/end_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="{дата завершения}" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/done_ratio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="{готовность}" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/tint" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Описание"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="8sp"
-            android:autoLink="all" />
-
-        <LinearLayout
-            android:id="@+id/children_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="vertical">
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/tint" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Подзадачи"
+                android:text="Описание"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/children"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/tint" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/relations_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Связанные задачи"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:lineSpacingExtra="8sp"
+                android:autoLink="all" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/relations"
+            <LinearLayout
+                android:id="@+id/children_group"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
 
-            <View
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Подзадачи"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/children"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/tint" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/relations_group"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/tint" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Связанные задачи"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/relations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/tint" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/history_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="История"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/tint" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/watchers_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Наблюдатели"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/watchers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/tint" />
+            </LinearLayout>
+
+            <name.peterbukhal.android.redmine.widget.SourceCodeView
+                android:id="@+id/source_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

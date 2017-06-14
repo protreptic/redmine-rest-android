@@ -30,7 +30,28 @@ import static name.peterbukhal.android.redmine.fragment.project.ProjectsFragment
  * @author Peter Bukhal petr.bukhal <at> doconcall.ru
  *         on 22.03.2017.
  */
-public final class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity implements FragmentTransactionAllowable {
+
+    private boolean mIsFragmentTransactionsAllowed;
+
+    @Override
+    public boolean isTransactionAllowed() {
+        return mIsFragmentTransactionsAllowed;
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        mIsFragmentTransactionsAllowed = true;
+
+        super.onResumeFragments();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        mIsFragmentTransactionsAllowed = false;
+
+        super.onSaveInstanceState(outState);
+    }
 
     private Toolbar initToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -81,6 +102,8 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mIsFragmentTransactionsAllowed = true;
 
         setContentView(R.layout.a_main);
 

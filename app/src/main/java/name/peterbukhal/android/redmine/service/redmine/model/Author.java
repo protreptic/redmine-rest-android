@@ -1,8 +1,5 @@
 package name.peterbukhal.android.redmine.service.redmine.model;
 
-/**
- * Created by petronic on 01.04.17.
- */
 public final class Author {
 
     private int id;
