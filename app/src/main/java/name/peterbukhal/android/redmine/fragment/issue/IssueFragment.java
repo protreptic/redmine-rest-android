@@ -580,7 +580,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
             final JournalRecord journalRecord = history.get(position);
 
             Picasso.with(getActivity())
-                    .load(getGravatar(""))
+                    .load(getGravatar(journalRecord.getUser().getName()))
                     .transform(new RoundedTransformation(4, 0))
                     .into(holder.avatar);
 
@@ -643,7 +643,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
             final Author watcher = watchers.get(position);
 
             Picasso.with(getActivity())
-                    .load(getGravatar(""))
+                    .load(getGravatar(watcher.getName()))
                     .transform(new RoundedTransformation(4, 0))
                     .into(holder.avatar);
 
