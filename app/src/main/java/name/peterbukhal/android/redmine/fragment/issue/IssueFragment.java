@@ -12,6 +12,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -396,9 +397,17 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                     mTvIssueSubject.setText(mIssue.getSubject());
                     mTvIssueCreation.setText(builder);
                     mTvIssueCreation.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+
+                    SpannableStringBuilder assignBuilder = new SpannableStringBuilder();
+                    assignBuilder.append("Назначена: ");
+                    assignBuilder.append(new UserSpannable((AppCompatActivity) getActivity(), mIssue.getAssignedTo()));
+
                     mTvStatus.setText("Статус: " + mIssue.getStatus().getName());
                     mTvPriority.setText("Приоритет: " + mIssue.getPriority().getName());
-                    mTvAssignTo.setText("Назначена: " + mIssue.getAssignedTo().getName());
+                    mTvAssignTo.setText(assignBuilder);
+                    mTvAssignTo.setMovementMethod(LinkMovementMethod.getInstance());
                     mTvStartDate.setText("Дата начала: " + mIssue.getStartDate());
                     mTvEndDate.setText("Дата завершения: " + mIssue.getEndDate());
                     mTvDoneRatio.setText("Готовность: " + mIssue.getDoneRatio() + "%");

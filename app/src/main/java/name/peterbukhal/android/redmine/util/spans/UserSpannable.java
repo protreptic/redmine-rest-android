@@ -11,7 +11,7 @@ import name.peterbukhal.android.redmine.service.redmine.model.Author;
 public class UserSpannable extends SpannableString {
 
     public UserSpannable(AppCompatActivity activity, Author author) {
-        super(author.getName());
+        super(" " + author.getName());
 
         setSpan(new UserSpan(activity.getSupportFragmentManager(), author), 0, length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         setSpan(new StyleSpan(Typeface.BOLD), 0, length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
