@@ -36,6 +36,7 @@
                     android:text="{Issue subject}"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:lineSpacingExtra="8sp"
                     android:autoLink="all"
                     android:layout_alignParentEnd="true"
                     android:layout_toEndOf="@+id/creator_avatar" />

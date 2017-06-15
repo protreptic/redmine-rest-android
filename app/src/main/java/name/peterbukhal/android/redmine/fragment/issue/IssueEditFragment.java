@@ -7,14 +7,14 @@ import android.support.v4.app.Fragment;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
 
-public final class EditIssueFragment extends AbsFragment {
+public final class IssueEditFragment extends AbsFragment {
 
     public static final String TAG_EDIT_ISSUE = "tag_edit_issue";
 
     public static Fragment newInstance() {
         Bundle arguments = new Bundle();
 
-        Fragment fragment = new EditIssueFragment();
+        Fragment fragment = new IssueEditFragment();
         fragment.setArguments(arguments);
 
         return fragment;

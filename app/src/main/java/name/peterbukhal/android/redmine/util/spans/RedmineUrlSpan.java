@@ -14,7 +14,7 @@ public class RedmineUrlSpan extends URLSpan {
 
     @Override
     public void updateDrawState(TextPaint ds) {
-        ds.setColor(Color.BLUE);
+        ds.setColor(Color.DKGRAY);
         ds.setUnderlineText(false);
     }
 

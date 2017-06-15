@@ -2,15 +2,9 @@
     <string name="app_name">Redmine</string>
     <string name="redmine">https://redmine.doctoroncall.ru</string>
     <string name="account_type">org.redmine.account</string>
-    <string name="account_authority">org.redmine.account.authority</string>
     <string name="issue_no">#%1$d</string>
-    <string name="issue_creation">Добавил(а) %1$s %2$s. Обновлено %3$s.</string>
-    <string name="update">Обновлено %1$s %2$s</string>
     <string name="my_issues">Мои задачи</string>
-    <string name="show_all">все</string>
     <string name="watched_issues">Отслеживаемые задачи</string>
     <string name="created_by_me_issues">Созданные задачи</string>
-    <string name="cancel">Отменить</string>
     <string name="not_watched">Не следить</string>
-    <string name="message_000003">Наблюдатель удален</string>
 </resources>

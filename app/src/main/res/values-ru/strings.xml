@@ -3,16 +3,23 @@
     <string name="my_page">Моя страница</string>
     <string name="projects">Проекты</string>
     <string name="guide">Помощь</string>
-    <string name="password_restoration">Восстановление пароля</string>
     <string name="username">Пользователь</string>
     <string name="password">Пароль</string>
-    <string name="add_account">Новый пользователь</string>
-    <string name="add_account_description">Добавить учетную запись</string>
     <string name="sign_in">Войти</string>
     <string name="edit">Редактировать</string>
     <string name="remove">Удалить</string>
-    <string name="labor_costs">Трудозатраты</string>
+    <string name="cancel">Отменить</string>
+    <string name="sub_issues">Подзадачи</string>
+    <string name="attachments">Прикрепленные файлы</string>
+    <string name="description">Описание</string>
+    <string name="watchers">Наблюдатели</string>
+    <string name="history">История</string>
+    <string name="relations">Связанные задачи</string>
 
     <string name="message_000001">Заявка успешно удалена</string>
     <string name="message_000002">Удалить заявку?</string>
+    <string name="message_000003">Наблюдатель удален</string>
+    <string name="message_000004">Прикрепленный файл удален</string>
+    <string name="message_000005">Удалить прикрепленный файл?</string>
+    <string name="message_000006">Удалить наблюдателя?</string>
 </resources>

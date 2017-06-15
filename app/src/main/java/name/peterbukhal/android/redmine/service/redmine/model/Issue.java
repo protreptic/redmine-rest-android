@@ -53,7 +53,10 @@ public final class Issue {
     private List<Author> watchers;
 
     @SerializedName("journals")
-    private List<JournalRecord> journals;
+    private List<HistoryRecord> journals;
+
+    @SerializedName("attachments")
+    private List<Attachment> attachments;
 
     public int getId() {
         return id;
@@ -139,12 +142,20 @@ public final class Issue {
         return watchers;
     }
 
-    public List<JournalRecord> getJournals() {
+    public List<HistoryRecord> getJournals() {
         if (journals == null) {
             journals = Collections.emptyList();
         }
 
         return journals;
+    }
+
+    public List<Attachment> getAttachments() {
+        if (attachments == null) {
+            attachments = Collections.emptyList();
+        }
+
+        return attachments;
     }
 
 }

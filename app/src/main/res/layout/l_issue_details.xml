@@ -14,7 +14,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -33,9 +34,10 @@
                     android:id="@+id/issue_subject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="{Issue subject}"
+                    tools:text="{issue subject}"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:lineSpacingExtra="8sp"
                     android:autoLink="all"
                     android:layout_alignParentEnd="true"
                     android:layout_toEndOf="@+id/creator_avatar" />
@@ -44,9 +46,8 @@
                     android:id="@+id/issue_creation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="{Issue creation}"
+                    tools:text="{issue creation}"
                     android:textSize="14sp"
-                    android:lineSpacingExtra="8sp"
                     android:layout_below="@+id/issue_subject"
                     android:layout_alignStart="@+id/issue_subject"
                     android:layout_alignParentEnd="true" />
@@ -112,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Описание"
+                android:text="@string/description"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -122,6 +123,27 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="8sp"
                 android:autoLink="all" />
+
+            <LinearLayout
+                android:id="@+id/attachments_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/attachments"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/attachments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/children_group"
@@ -134,7 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:text="Подзадачи"
+                    android:text="@string/sub_issues"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -142,11 +164,6 @@
                     android:id="@+id/children"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/tint" />
             </LinearLayout>
 
             <LinearLayout
@@ -160,7 +177,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:text="Связанные задачи"
+                    android:text="@string/relations"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -168,11 +185,6 @@
                     android:id="@+id/relations"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/tint" />
             </LinearLayout>
 
             <LinearLayout
@@ -186,7 +198,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:text="История"
+                    android:text="@string/history"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -207,7 +219,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:text="Наблюдатели"
+                    android:text="@string/watchers"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 

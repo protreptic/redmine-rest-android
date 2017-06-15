@@ -3,10 +3,23 @@
     <string name="my_page">My page</string>
     <string name="projects">Projects</string>
     <string name="guide">Guide</string>
-    <string name="password_restoration">Restore password</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="sign_in">Войти</string>
     <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
+    <string name="sub_issues">Sub issues</string>
+    <string name="attachments">Attachments</string>
+    <string name="description">Description</string>
+    <string name="watchers">Watchers</string>
+    <string name="history">History</string>
+    <string name="relations">Relations</string>
 
     <string name="message_000001">Issue has been removed</string>
+    <string name="message_000002">Remove issue?</string>
+    <string name="message_000003">Watcher has been removed</string>
+    <string name="message_000004">Attachment has been removed</string>
+    <string name="message_000005">Remove attachment?</string>
+    <string name="message_000006">Remove watcher?</string>
 </resources>

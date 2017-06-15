@@ -10,6 +10,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,14 +35,17 @@ import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.dialog.ConfirmationDialog;
 import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
+import name.peterbukhal.android.redmine.service.redmine.RedmineProvider;
+import name.peterbukhal.android.redmine.service.redmine.model.Attachment;
 import name.peterbukhal.android.redmine.service.redmine.model.Author;
+import name.peterbukhal.android.redmine.service.redmine.model.HistoryRecord;
 import name.peterbukhal.android.redmine.service.redmine.model.Issue;
-import name.peterbukhal.android.redmine.service.redmine.model.JournalRecord;
 import name.peterbukhal.android.redmine.service.redmine.model.Relation;
 import name.peterbukhal.android.redmine.service.redmine.model.User;
 import name.peterbukhal.android.redmine.service.redmine.response.IssueResponse;
 import name.peterbukhal.android.redmine.service.redmine.response.UserResponse;
 import name.peterbukhal.android.redmine.util.RoundedTransformation;
+import name.peterbukhal.android.redmine.util.spans.AttachmentSpannable;
 import name.peterbukhal.android.redmine.util.spans.DateSpannable;
 import name.peterbukhal.android.redmine.util.spans.UserSpannable;
 import name.peterbukhal.android.redmine.widget.SourceCodeView;
@@ -50,7 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static name.peterbukhal.android.redmine.fragment.issue.EditIssueFragment.TAG_EDIT_ISSUE;
+import static name.peterbukhal.android.redmine.fragment.issue.IssueEditFragment.TAG_EDIT_ISSUE;
 import static name.peterbukhal.android.redmine.service.redmine.RedmineProvider.provide;
 import static name.peterbukhal.android.redmine.util.Utils.getGravatar;
 
@@ -94,10 +98,10 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                 editIssue();
             } break;
             case R.id.watch: {
-                watchIssue();
+                addWatcher();
             } break;
             case R.id.remove: {
-                deleteIssue();
+                removeIssue(mIssue.getId());
             } break;
             default: {
                 return false;
@@ -111,12 +115,12 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_content, EditIssueFragment.newInstance(), TAG_EDIT_ISSUE)
+                .replace(R.id.main_content, IssueEditFragment.newInstance(), TAG_EDIT_ISSUE)
                 .addToBackStack(TAG_EDIT_ISSUE)
                 .commitAllowingStateLoss();
     }
 
-    private void watchIssue() {
+    private void addWatcher() {
         provide().addWatcher(mIssue.getId(), 0)
                 .enqueue(new Callback<ResponseBody>() {
 
@@ -134,38 +138,46 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         });
     }
 
-    private void deleteWatcher(int userId) {
-        provide().deleteWatcher(mIssue.getId(), userId).enqueue(new Callback<ResponseBody>() {
-
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (!isTransactionAllowed()) return;
-
-                if (response.isSuccessful()) {
-                    fetchIssue(mIssue.getId());
-
-                    Toast.makeText(getActivity(), R.string.message_000003, Toast.LENGTH_LONG).show();
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!isTransactionAllowed()) return;
-
-            }
-
-        });
-    }
-
-    private void deleteIssue() {
-        ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity());
+    private void removeWatcher(final int userId) {
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity(), getString(R.string.message_000006));
         confirmationDialog.setConfirmationDialogListener(new ConfirmationDialog.ConfirmationDialogListener() {
 
             @Override
             public void onConfirmed() {
-                provide().deleteIssue(mIssue.getId())
+                provide().removeWatcher(mIssue.getId(), userId)
+                        .enqueue(new Callback<ResponseBody>() {
+
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (!isTransactionAllowed()) return;
+
+                                if (response.isSuccessful()) {
+                                    fetchIssue(mIssue.getId());
+
+                                    Toast.makeText(getActivity(), R.string.message_000003, Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {}
+
+                        });
+            }
+
+            @Override
+            public void onCancel() {}
+
+        });
+        confirmationDialog.show();
+    }
+
+    private void removeIssue(final int issueId) {
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity(), getString(R.string.message_000002));
+        confirmationDialog.setConfirmationDialogListener(new ConfirmationDialog.ConfirmationDialogListener() {
+
+            @Override
+            public void onConfirmed() {
+                provide().removeIssue(issueId)
                         .enqueue(new Callback<ResponseBody>() {
 
                             @Override
@@ -186,6 +198,39 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                                 if (!isTransactionAllowed()) return;
 
                             }
+
+                        });
+            }
+
+            @Override
+            public void onCancel() {}
+
+        });
+        confirmationDialog.show();
+    }
+
+    private void removeAttachment(final int attachmentId) {
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity(), getString(R.string.message_000005));
+        confirmationDialog.setConfirmationDialogListener(new ConfirmationDialog.ConfirmationDialogListener() {
+
+            @Override
+            public void onConfirmed() {
+                RedmineProvider.provide().removeAttachment(attachmentId)
+                        .enqueue(new Callback<ResponseBody>() {
+
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (!isTransactionAllowed()) return;
+
+                                if (response.isSuccessful()) {
+                                    fetchIssue(mIssue.getId());
+
+                                    Toast.makeText(getActivity(), R.string.message_000004, Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {}
 
                         });
             }
@@ -230,6 +275,12 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     @BindView(R.id.description)
     TextView mTvDescription;
 
+    @BindView(R.id.attachments_group)
+    ViewGroup mVgAttachments;
+
+    @BindView(R.id.attachments)
+    RecyclerView mRvAttachments;
+
     @BindView(R.id.children_group)
     ViewGroup mVgChildren;
 
@@ -268,6 +319,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
             mUnbinder = ButterKnife.bind(this, content);
 
             mSrlRefresh.setOnRefreshListener(this);
+            mRvAttachments.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRvChildren.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRvRelations.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -309,24 +361,17 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                             .load(getGravatar(user.getMail()))
                             .transform(new RoundedTransformation(4, 0))
                             .into(mCreatorAvatar);
-                } else {
-
                 }
             }
 
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                if (!isTransactionAllowed()) return;
-
-            }
+            public void onFailure(Call<UserResponse> call, Throwable t) {}
 
         });
     }
 
     private void fetchIssue(final int issueId) {
-        sourceCodeView.setText("");
-
-        provide().issue(issueId, "children,relations,watchers,journals")
+        provide().issue(issueId, "attachments,children,relations,watchers,journals")
                 .enqueue(new Callback<IssueResponse>() {
 
             @Override
@@ -358,6 +403,13 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                     mTvEndDate.setText("Дата завершения: " + mIssue.getEndDate());
                     mTvDoneRatio.setText("Готовность: " + mIssue.getDoneRatio() + "%");
                     mTvDescription.setText(Html.fromHtml(mIssue.getDescription()));
+
+                    if (!mIssue.getAttachments().isEmpty()) {
+                        mRvAttachments.setAdapter(new AttachmentsAdapter(mIssue.getAttachments()));
+                        mVgAttachments.setVisibility(View.VISIBLE);
+                    } else {
+                        mVgAttachments.setVisibility(View.GONE);
+                    }
 
                     if (!mIssue.getChildren().isEmpty()) {
                         mRvChildren.setAdapter(new ChildrenAdapter(mIssue.getChildren()));
@@ -415,6 +467,60 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         mUnbinder.unbind();
     }
 
+    private class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentViewHolder> {
+
+        private List<Attachment> attachments = new ArrayList<>();
+
+        AttachmentsAdapter(List<Attachment> attachments) {
+            this.attachments.addAll(attachments);
+        }
+
+        @Override
+        public AttachmentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new AttachmentViewHolder(LayoutInflater.from(getActivity())
+                    .inflate(R.layout.l_attachment, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(AttachmentViewHolder holder, int position) {
+            final Attachment attachment = attachments.get(position);
+
+            holder.name.setText(new AttachmentSpannable(getContext(), attachment));
+            holder.remove.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    removeAttachment(attachment.getId());
+                }
+
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return attachments.size();
+        }
+
+    }
+
+    static class AttachmentViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.name)
+        TextView name;
+
+        @BindView(R.id.remove_attachment)
+        ImageButton remove;
+
+        public AttachmentViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
+
+            name.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
+    }
+
     private class ChildrenAdapter extends RecyclerView.Adapter<IssueViewHolder> {
 
         private List<Issue> issues = new ArrayList<>();
@@ -467,10 +573,10 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                                     editIssue();
                                 } break;
                                 case R.id.watch: {
-                                    watchIssue();
+                                    addWatcher();
                                 } break;
                                 case R.id.remove: {
-                                    deleteIssue();
+                                    removeIssue(issue.getId());
                                 } break;
                                 default: {
                                     return false;
@@ -563,9 +669,9 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
     private class HistoryAdapter extends RecyclerView.Adapter<HistoryRecordHolder> {
 
-        private List<JournalRecord> history = new ArrayList<>();
+        private List<HistoryRecord> history = new ArrayList<>();
 
-        HistoryAdapter(List<JournalRecord> history) {
+        HistoryAdapter(List<HistoryRecord> history) {
             this.history.addAll(history);
         }
 
@@ -577,25 +683,26 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
         @Override
         public void onBindViewHolder(HistoryRecordHolder holder, int position) {
-            final JournalRecord journalRecord = history.get(position);
+            final HistoryRecord historyRecord = history.get(position);
 
             Picasso.with(getActivity())
-                    .load(getGravatar(journalRecord.getUser().getName()))
+                    .load(getGravatar(historyRecord.getUser().getName()))
                     .transform(new RoundedTransformation(4, 0))
                     .into(holder.avatar);
 
             SpannableStringBuilder builder = new SpannableStringBuilder();
             builder.append("Обновлено ");
-            builder.append(new UserSpannable((AppCompatActivity) getActivity(), journalRecord.getUser()));
+            builder.append(new UserSpannable((AppCompatActivity) getActivity(), historyRecord.getUser()));
             builder.append(" ");
-            builder.append(new DateSpannable(journalRecord.getCreated_on()));
+            builder.append(new DateSpannable(historyRecord.getCreated_on()));
             builder.append(".");
 
             holder.title.setText(builder);
             holder.title.setMovementMethod(LinkMovementMethod.getInstance());
 
             try {
-                holder.notes.setText(Html.fromHtml(journalRecord.getNotes()));
+                holder.notes.setText(Html.fromHtml(historyRecord.getNotes()));
+                holder.notes.setVisibility(TextUtils.isEmpty(historyRecord.getNotes()) ? View.GONE : View.VISIBLE);
             } catch (Exception e) {
                 //
             }
@@ -654,7 +761,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
                 @Override
                 public void onClick(View v) {
-                    deleteWatcher(watcher.getId());
+                    removeWatcher(watcher.getId());
                 }
 
             });

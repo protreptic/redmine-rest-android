@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import name.peterbukhal.android.redmine.R;
+import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
 import name.peterbukhal.android.redmine.fragment.issue.CreatedByMeIssuesFragment;
 import name.peterbukhal.android.redmine.fragment.issue.MyIssuesFragment;
 import name.peterbukhal.android.redmine.fragment.issue.WatchedIssuesFragment;
@@ -22,15 +23,15 @@ import static name.peterbukhal.android.redmine.fragment.issue.WatchedIssuesFragm
  * @author Peter Bukhal petr.bukhal <at> doconcall.ru
  *         on 23.03.2017.
  */
-public final class MyPageFragment extends Fragment {
+public final class MyPageFragment extends AbsFragment {
 
-    public static final String TAG_MY_PAGE = "tag_my_page";
+    public static final String FRAGMENT_TAG_MY_PAGE = "fragment_tag_my_page";
 
     public static Fragment newInstance() {
-        final Bundle args = new Bundle();
+        Bundle arguments = new Bundle();
 
         Fragment fragment = new MyPageFragment();
-        fragment.setArguments(args);
+        fragment.setArguments(arguments);
 
         return fragment;
     }
@@ -48,20 +49,10 @@ public final class MyPageFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        getChildFragmentManager()
-                .beginTransaction()
-                .remove(getChildFragmentManager().findFragmentByTag(TAG_MY_ISSUES))
-                .remove(getChildFragmentManager().findFragmentByTag(TAG_WATCHED_ISSUES))
-                .remove(getChildFragmentManager().findFragmentByTag(TAG_CREATED_BY_ME_ISSUES))
-                .commitAllowingStateLoss();
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        setTitle(getString(R.string.my_page));
 
         if (savedInstanceState == null) {
             getChildFragmentManager()
@@ -71,6 +62,18 @@ public final class MyPageFragment extends Fragment {
                     .add(R.id.fragmentContent, CreatedByMeIssuesFragment.newInstance(), TAG_CREATED_BY_ME_ISSUES)
                     .commit();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        getChildFragmentManager()
+                .beginTransaction()
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_MY_ISSUES))
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_WATCHED_ISSUES))
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_CREATED_BY_ME_ISSUES))
+                .commitAllowingStateLoss();
     }
 
 }

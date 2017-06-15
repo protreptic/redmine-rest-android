@@ -21,9 +21,9 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "name.peterbukhal.android.redmine"
         minSdkVersion 19
         targetSdkVersion 25
+        applicationId "name.peterbukhal.android.redmine"
         versionCode 1
         versionName "1.0"
     }

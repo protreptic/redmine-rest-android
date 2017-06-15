@@ -3,6 +3,7 @@ package name.peterbukhal.android.redmine.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -27,7 +28,7 @@ public final class ConfirmationDialog extends Dialog {
 
     private ConfirmationDialogListener mConfirmationDialogListener;
 
-    public ConfirmationDialog(@NonNull final Context context) {
+    public ConfirmationDialog(@NonNull Context context, @Nullable String message) {
         super(context, R.style.AlertDialog);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -37,7 +38,7 @@ public final class ConfirmationDialog extends Dialog {
         setCancelable(true);
 
         TextView tvMessage = (TextView) findViewById(R.id.message);
-        tvMessage.setText(R.string.message_000002);
+        tvMessage.setText(message);
 
         Button btConfirm = (Button) findViewById(R.id.confirm);
         btConfirm.setOnClickListener(new View.OnClickListener() {

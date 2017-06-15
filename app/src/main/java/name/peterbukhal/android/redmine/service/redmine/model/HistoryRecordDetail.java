@@ -1,6 +1,6 @@
 package name.peterbukhal.android.redmine.service.redmine.model;
 
-public final class JournalRecordDetail {
+public final class HistoryRecordDetail {
 
     private String property;
     private String name;

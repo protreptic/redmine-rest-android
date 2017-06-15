@@ -21,7 +21,7 @@ import name.peterbukhal.android.redmine.fragment.MyPageFragment;
 import name.peterbukhal.android.redmine.fragment.project.ProjectsFragment;
 
 import static name.peterbukhal.android.redmine.fragment.GuideFragment.TAG_GUIDE;
-import static name.peterbukhal.android.redmine.fragment.MyPageFragment.TAG_MY_PAGE;
+import static name.peterbukhal.android.redmine.fragment.MyPageFragment.FRAGMENT_TAG_MY_PAGE;
 import static name.peterbukhal.android.redmine.fragment.project.ProjectsFragment.TAG_PROJECTS;
 
 /**
@@ -124,7 +124,7 @@ public final class MainActivity extends AppCompatActivity implements FragmentTra
                             case 1: {
                                 getSupportFragmentManager()
                                         .beginTransaction()
-                                        .replace(R.id.main_content, MyPageFragment.newInstance(), TAG_MY_PAGE)
+                                        .replace(R.id.main_content, MyPageFragment.newInstance(), FRAGMENT_TAG_MY_PAGE)
                                         .commit();
                             } break;
                             case 2: {

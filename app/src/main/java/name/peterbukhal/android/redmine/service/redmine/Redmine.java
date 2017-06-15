@@ -102,12 +102,15 @@ public interface Redmine {
     Call<TimeEntriesResponse> timeEntries();
 
     @DELETE("/issues/{id}.json")
-    Call<ResponseBody> deleteIssue(@Path("id") int id);
+    Call<ResponseBody> removeIssue(@Path("id") int id);
 
     @POST("/issues/{id}/watchers.json")
     Call<ResponseBody> addWatcher(@Path("id") int id, @Query("user_id") int userId);
 
     @DELETE("/issues/{id}/watchers/{user_id}.json")
-    Call<ResponseBody> deleteWatcher(@Path("id") int id, @Path("user_id") int userId);
+    Call<ResponseBody> removeWatcher(@Path("id") int id, @Path("user_id") int userId);
+
+    @DELETE("/attachments/{attachmentId}.json")
+    Call<ResponseBody> removeAttachment(@Path("attachmentId") int attachmentId);
 
 }

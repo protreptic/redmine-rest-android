@@ -111,7 +111,7 @@ public final class CreatedByMeIssuesFragment extends Fragment {
         public void onBindViewHolder(WatchedIssuesFragment.IssueViewHolder holder, int position) {
             final Issue issue = mIssues.get(position);
 
-            holder.mTvIssueNo.setText(issue.getId() + "");
+            holder.mTvIssueNo.setText("#" + issue.getId());
             holder.mTvProject.setText(issue.getProject().getName());
             holder.mTvTracker.setText(issue.getTracker() != null ? issue.getTracker().getName() : "");
             holder.mTvSubjectAndStatus.setText(issue.getTracker() != null ? (issue.getSubject() + " (" + issue.getStatus().getName() + ")") : "");
