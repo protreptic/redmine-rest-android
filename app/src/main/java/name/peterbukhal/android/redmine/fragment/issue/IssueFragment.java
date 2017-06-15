@@ -343,10 +343,10 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                     builder.append(new UserSpannable((AppCompatActivity) getActivity(), mIssue.getAuthor()));
                     builder.append(" ");
                     builder.append(new DateSpannable(mIssue.getCreatedOn()));
-                    builder.append(" назад. ");
+                    builder.append(". ");
                     builder.append("Обновлено ");
                     builder.append(new DateSpannable(mIssue.getUpdatedOn()));
-                    builder.append(" назад.");
+                    builder.append(".");
 
                     mTvIssueSubject.setText(mIssue.getSubject());
                     mTvIssueCreation.setText(builder);
@@ -589,7 +589,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
             builder.append(new UserSpannable((AppCompatActivity) getActivity(), journalRecord.getUser()));
             builder.append(" ");
             builder.append(new DateSpannable(journalRecord.getCreated_on()));
-            builder.append(" назад.");
+            builder.append(".");
 
             holder.title.setText(builder);
             holder.title.setMovementMethod(LinkMovementMethod.getInstance());
