@@ -12,7 +12,6 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,7 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static name.peterbukhal.android.redmine.fragment.issue.IssueEditFragment.TAG_EDIT_ISSUE;
+import static name.peterbukhal.android.redmine.fragment.issue.EditIssueFragment.TAG_EDIT_ISSUE;
 import static name.peterbukhal.android.redmine.service.redmine.RedmineProvider.provide;
 import static name.peterbukhal.android.redmine.util.Utils.getGravatar;
 
@@ -67,7 +66,7 @@ import static name.peterbukhal.android.redmine.util.Utils.getGravatar;
  */
 public final class IssueFragment extends AbsFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String TAG_ISSUE = "tag_issue";
+    public static final String TAG_ISSUE = "fragment_tag_issue";
     public static final String ARG_ISSUE_ID = "arg_issue_id";
 
     public static Fragment newInstance(int issueId) {
@@ -116,7 +115,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_content, IssueEditFragment.newInstance(), TAG_EDIT_ISSUE)
+                .replace(R.id.main_content, EditIssueFragment.newInstance(mIssue.getId()), TAG_EDIT_ISSUE)
                 .addToBackStack(TAG_EDIT_ISSUE)
                 .commitAllowingStateLoss();
     }
@@ -314,7 +313,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final ViewGroup content = (ViewGroup) inflater.inflate(R.layout.l_issue_details, container, false);
+        final ViewGroup content = (ViewGroup) inflater.inflate(R.layout.f_issue, container, false);
 
         if (content != null) {
             mUnbinder = ButterKnife.bind(this, content);
@@ -335,6 +334,8 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        showBackArrow();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ISSUE_ID)) {
             final int issueId = savedInstanceState.getInt(ARG_ISSUE_ID);
@@ -382,7 +383,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                 if (response.isSuccessful()) {
                     mIssue = response.body().getIssue();
 
-                    setTitle(getString(R.string.issue_no, issueId) + " " + mIssue.getSubject());
+                    setTitle(getString(R.string.issue_no, issueId));
 
                     SpannableStringBuilder builder = new SpannableStringBuilder();
                     builder.append("Добавил(а) ");
@@ -397,8 +398,6 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
                     mTvIssueSubject.setText(mIssue.getSubject());
                     mTvIssueCreation.setText(builder);
                     mTvIssueCreation.setMovementMethod(LinkMovementMethod.getInstance());
-
-
 
                     SpannableStringBuilder assignBuilder = new SpannableStringBuilder();
                     assignBuilder.append("Назначена: ");
@@ -473,7 +472,13 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     public void onDestroyView() {
         super.onDestroyView();
 
-        mUnbinder.unbind();
+        try {
+            mUnbinder.unbind();
+
+            hideBackArrow();
+        } catch (Exception e) {
+            //
+        }
     }
 
     private class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentViewHolder> {

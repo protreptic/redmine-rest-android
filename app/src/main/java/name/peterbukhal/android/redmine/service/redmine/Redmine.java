@@ -1,7 +1,10 @@
 package name.peterbukhal.android.redmine.service.redmine;
 
+import name.peterbukhal.android.redmine.service.redmine.model.Issue;
+import name.peterbukhal.android.redmine.service.redmine.request.EditIssueRequest;
 import name.peterbukhal.android.redmine.service.redmine.response.CurrentResponse;
 import name.peterbukhal.android.redmine.service.redmine.response.IssueResponse;
+import name.peterbukhal.android.redmine.service.redmine.response.IssueStatusesResponse;
 import name.peterbukhal.android.redmine.service.redmine.response.IssuesResponse;
 import name.peterbukhal.android.redmine.service.redmine.response.ProjectsResponse;
 import name.peterbukhal.android.redmine.service.redmine.response.TimeEntriesResponse;
@@ -10,9 +13,11 @@ import name.peterbukhal.android.redmine.service.redmine.response.UsersResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -112,5 +117,11 @@ public interface Redmine {
 
     @DELETE("/attachments/{attachmentId}.json")
     Call<ResponseBody> removeAttachment(@Path("attachmentId") int attachmentId);
+
+    @GET("/issue_statuses.json")
+    Call<IssueStatusesResponse> issueStatuses();
+
+    @PUT("/issues/{id}.json")
+    Call<ResponseBody> editIssue(@Path("id") int id, @Body EditIssueRequest request);
 
 }

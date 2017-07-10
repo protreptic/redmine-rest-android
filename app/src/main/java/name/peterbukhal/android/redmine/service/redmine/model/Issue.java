@@ -62,6 +62,10 @@ public final class Issue {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Project getProject() {
         return project;
     }
@@ -88,6 +92,10 @@ public final class Issue {
 
     public String getSubject() {
         return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getDescription() {

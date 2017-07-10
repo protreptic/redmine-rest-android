@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.activity;
+package name.peterbukhal.android.redmine.activity.abs;
 
 public interface FragmentTransactionAllowable {
 

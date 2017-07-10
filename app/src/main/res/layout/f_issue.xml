@@ -37,7 +37,6 @@
                     tools:text="{issue subject}"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:lineSpacingExtra="8sp"
                     android:autoLink="all"
                     android:layout_alignParentEnd="true"
                     android:layout_toEndOf="@+id/creator_avatar" />
@@ -48,6 +47,7 @@
                     android:layout_height="wrap_content"
                     tools:text="{issue creation}"
                     android:textSize="14sp"
+                    android:lineSpacingExtra="8sp"
                     android:layout_below="@+id/issue_subject"
                     android:layout_alignStart="@+id/issue_subject"
                     android:layout_alignParentEnd="true" />
