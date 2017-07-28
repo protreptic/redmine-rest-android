@@ -10,7 +10,7 @@ public class Issue extends RealmObject {
     private int id;
     private Project project;
     private Tracker tracker;
-    private Status status;
+    private StatusRealm statusRealm;
     private Priority priority;
     private Author author;
     private String subject;
@@ -49,12 +49,12 @@ public class Issue extends RealmObject {
         this.tracker = tracker;
     }
 
-    public Status getStatus() {
-        return status;
+    public StatusRealm getStatus() {
+        return statusRealm;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(StatusRealm statusRealm) {
+        this.statusRealm = statusRealm;
     }
 
     public Priority getPriority() {

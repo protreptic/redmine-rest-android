@@ -15,7 +15,7 @@ import name.peterbukhal.android.redmine.realm.Author;
 import name.peterbukhal.android.redmine.realm.Issue;
 import name.peterbukhal.android.redmine.realm.Priority;
 import name.peterbukhal.android.redmine.realm.Project;
-import name.peterbukhal.android.redmine.realm.Status;
+import name.peterbukhal.android.redmine.realm.StatusRealm;
 import name.peterbukhal.android.redmine.realm.Tracker;
 
 public final class IssueDeserializer implements JsonDeserializer<Issue> {
@@ -28,7 +28,7 @@ public final class IssueDeserializer implements JsonDeserializer<Issue> {
         issue.setId(jsonObject.get("id").getAsInt());
         issue.setProject(context.<Project>deserialize(jsonObject.get("project"), Project.class));
         issue.setTracker(context.<Tracker>deserialize(jsonObject.get("tracker"), Tracker.class));
-        issue.setStatus(context.<Status>deserialize(jsonObject.get("status"), Status.class));
+        issue.setStatus(context.<StatusRealm>deserialize(jsonObject.get("status"), StatusRealm.class));
         issue.setPriority(context.<Priority>deserialize(jsonObject.get("priority"), Priority.class));
         issue.setAuthor(context.<Author>deserialize(jsonObject.get("author"), Author.class));
         issue.setSubject(jsonObject.get("subject").getAsString());

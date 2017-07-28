@@ -5,10 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-import com.squareup.haha.perflib.Main;
-
 import io.realm.Realm;
-import name.peterbukhal.android.redmine.activity.MainActivity;
 import name.peterbukhal.android.redmine.activity.abs.FragmentTransactionAllowable;
 
 public abstract class AbsFragment extends Fragment implements FragmentTransactionAllowable {
@@ -36,16 +33,6 @@ public abstract class AbsFragment extends Fragment implements FragmentTransactio
         ((AppCompatActivity) getActivity())
                 .getSupportActionBar()
                 .setTitle(title);
-    }
-
-    protected void showBackArrow() {
-        ((MainActivity) getActivity())
-                .showBackArrow();
-    }
-
-    protected void hideBackArrow() {
-        ((MainActivity) getActivity())
-                .hideBackArrow();
     }
 
     @Override

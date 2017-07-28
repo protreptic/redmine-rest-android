@@ -98,7 +98,7 @@ public final class UserFragment extends AbsFragment implements SwipeRefreshLayou
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setTitle("Пользователь");
+        setTitle(getString(R.string.user));
 
         if (getArguments().containsKey(ARG_USER_ID)) {
             mUserId = getArguments().getInt(ARG_USER_ID);
@@ -153,6 +153,13 @@ public final class UserFragment extends AbsFragment implements SwipeRefreshLayou
         mSrlRefresh.setRefreshing(true);
 
         fetchUser(mUserId);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        mUnbinder.unbind();
     }
 
 }

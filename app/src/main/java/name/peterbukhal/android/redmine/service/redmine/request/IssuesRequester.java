@@ -12,18 +12,24 @@ import static name.peterbukhal.android.redmine.service.redmine.RedmineProvider.p
 
 public final class IssuesRequester implements Parcelable {
 
+    public static final String FIELD_CREATED_ON = "created_on";
+    public static final String FIELD_UPDATED_ON = "updated_on";
+    public static final String FIELD_CATEGORY = "category";
+
     public static IssuesRequester CREATED_BY_ME =
             new IssuesRequester()
                     .withCreatedByMe()
-                    .withSort("updated_on", true)
-                    .withLimit(10);
+                    .withSort(FIELD_UPDATED_ON, true);
 
     public static IssuesRequester ASSIGNED_TO_ME =
             new IssuesRequester()
                     .withAssignedToMe()
-                    .withIssueId()
-                    .withSort("updated_on", true)
-                    .withLimit(10);
+                    .withSort(FIELD_UPDATED_ON, true);
+
+    public static IssuesRequester WATCHED_BY_ME =
+            new IssuesRequester()
+                    .withWatchedByMe()
+                    .withSort(FIELD_UPDATED_ON, true);
 
     private int mOffset = 0;
     private int mLimit = 0;
@@ -37,7 +43,7 @@ public final class IssuesRequester implements Parcelable {
     private String mWatcherId;
     private String mAuthorId;
 
-    public IssuesRequester() {
+    private IssuesRequester() {
         // empty
     }
 
@@ -138,8 +144,9 @@ public final class IssuesRequester implements Parcelable {
     public retrofit2.Call<IssuesResponse> build() {
         return provide().issues(
                 mOffset, mLimit, mSort, mIssueIds,
-                mProjectId, mSubProjectId, mTrackerId, mWatcherId, mAuthorId,
-                mStatusIds, mAssignedToId, null);
+                mProjectId, mSubProjectId, mTrackerId,
+                mWatcherId, mAuthorId, mStatusIds,
+                mAssignedToId, null);
     }
 
     @Override

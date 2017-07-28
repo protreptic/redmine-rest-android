@@ -9,13 +9,12 @@ import android.view.ViewGroup;
 
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
-import name.peterbukhal.android.redmine.fragment.issue.CreatedByMeIssuesFragment;
-import name.peterbukhal.android.redmine.fragment.issue.MyIssuesFragment;
-import name.peterbukhal.android.redmine.fragment.issue.WatchedIssuesFragment;
+import name.peterbukhal.android.redmine.fragment.issue.IssuesFragment;
 
-import static name.peterbukhal.android.redmine.fragment.issue.CreatedByMeIssuesFragment.TAG_CREATED_BY_ME_ISSUES;
-import static name.peterbukhal.android.redmine.fragment.issue.MyIssuesFragment.TAG_MY_ISSUES;
-import static name.peterbukhal.android.redmine.fragment.issue.WatchedIssuesFragment.TAG_WATCHED_ISSUES;
+import static name.peterbukhal.android.redmine.fragment.issue.IssuesFragment.TAG_ISSUES;
+import static name.peterbukhal.android.redmine.service.redmine.request.IssuesRequester.ASSIGNED_TO_ME;
+import static name.peterbukhal.android.redmine.service.redmine.request.IssuesRequester.CREATED_BY_ME;
+import static name.peterbukhal.android.redmine.service.redmine.request.IssuesRequester.WATCHED_BY_ME;
 
 /**
  * Created by
@@ -39,13 +38,7 @@ public final class MyPageFragment extends AbsFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final ViewGroup content = (ViewGroup) inflater.inflate(R.layout.f_my_page, container, false);
-
-        if (content != null) {
-
-        }
-
-        return content;
+        return inflater.inflate(R.layout.f_my_page, container, false);
     }
 
     @Override
@@ -57,10 +50,10 @@ public final class MyPageFragment extends AbsFragment {
         if (savedInstanceState == null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragmentContent, MyIssuesFragment.newInstance(), TAG_MY_ISSUES)
-                    .add(R.id.fragmentContent, WatchedIssuesFragment.newInstance(), TAG_WATCHED_ISSUES)
-                    .add(R.id.fragmentContent, CreatedByMeIssuesFragment.newInstance(), TAG_CREATED_BY_ME_ISSUES)
-                    .commit();
+                    .add(R.id.fragment_content, IssuesFragment.newInstance(getString(R.string.my_issues), ASSIGNED_TO_ME), TAG_ISSUES + 1)
+                    .add(R.id.fragment_content, IssuesFragment.newInstance(getString(R.string.watched_issues), WATCHED_BY_ME), TAG_ISSUES + 2)
+                    .add(R.id.fragment_content, IssuesFragment.newInstance(getString(R.string.created_by_me_issues), CREATED_BY_ME), TAG_ISSUES + 3)
+                    .commitNow();
         }
     }
 
@@ -70,10 +63,10 @@ public final class MyPageFragment extends AbsFragment {
 
         getChildFragmentManager()
                 .beginTransaction()
-                .remove(getChildFragmentManager().findFragmentByTag(TAG_MY_ISSUES))
-                .remove(getChildFragmentManager().findFragmentByTag(TAG_WATCHED_ISSUES))
-                .remove(getChildFragmentManager().findFragmentByTag(TAG_CREATED_BY_ME_ISSUES))
-                .commitAllowingStateLoss();
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_ISSUES + 1))
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_ISSUES + 2))
+                .remove(getChildFragmentManager().findFragmentByTag(TAG_ISSUES + 3))
+                .commitNowAllowingStateLoss();
     }
 
 }

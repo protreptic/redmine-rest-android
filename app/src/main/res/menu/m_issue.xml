@@ -7,7 +7,7 @@
         android:id="@+id/watch"
         android:icon="@drawable/ic_watched"
         android:title="@string/not_watched"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/edit"

@@ -7,4 +7,5 @@
     <string name="watched_issues">Отслеживаемые задачи</string>
     <string name="created_by_me_issues">Созданные задачи</string>
     <string name="not_watched">Не следить</string>
+    <string name="user">Пользователь</string>
 </resources>

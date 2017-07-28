@@ -8,19 +8,19 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
-import name.peterbukhal.android.redmine.realm.Status;
+import name.peterbukhal.android.redmine.realm.StatusRealm;
 
-public final class StatusDeserializer implements JsonDeserializer<Status> {
+public final class StatusDeserializer implements JsonDeserializer<StatusRealm> {
 
     @Override
-    public Status deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public StatusRealm deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
 
-        Status status = new Status();
-        status.setId(jsonObject.get("id").getAsInt());
-        status.setName(jsonObject.get("name").getAsString());
+        StatusRealm statusRealm = new StatusRealm();
+        statusRealm.setId(jsonObject.get("id").getAsInt());
+        statusRealm.setName(jsonObject.get("name").getAsString());
 
-        return status;
+        return statusRealm;
     }
 
 }

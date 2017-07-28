@@ -35,7 +35,6 @@ import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.dialog.ConfirmationDialog;
 import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
-import name.peterbukhal.android.redmine.service.redmine.RedmineProvider;
 import name.peterbukhal.android.redmine.service.redmine.model.Attachment;
 import name.peterbukhal.android.redmine.service.redmine.model.Author;
 import name.peterbukhal.android.redmine.service.redmine.model.HistoryRecord;
@@ -54,7 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static name.peterbukhal.android.redmine.fragment.issue.EditIssueFragment.TAG_EDIT_ISSUE;
+import static name.peterbukhal.android.redmine.fragment.issue.IssueEditFragment.TAG_EDIT_ISSUE;
 import static name.peterbukhal.android.redmine.service.redmine.RedmineProvider.provide;
 import static name.peterbukhal.android.redmine.util.Utils.getGravatar;
 
@@ -70,7 +69,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     public static final String ARG_ISSUE_ID = "arg_issue_id";
 
     public static Fragment newInstance(int issueId) {
-        final Bundle arguments = new Bundle();
+        Bundle arguments = new Bundle();
         arguments.putInt(ARG_ISSUE_ID, issueId);
 
         Fragment fragment = new IssueFragment();
@@ -115,7 +114,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_content, EditIssueFragment.newInstance(mIssue.getId()), TAG_EDIT_ISSUE)
+                .replace(R.id.main_content, IssueEditFragment.newInstance(mIssue.getId()), TAG_EDIT_ISSUE)
                 .addToBackStack(TAG_EDIT_ISSUE)
                 .commitAllowingStateLoss();
     }
@@ -215,7 +214,7 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
             @Override
             public void onConfirmed() {
-                RedmineProvider.provide().removeAttachment(attachmentId)
+                provide().removeAttachment(attachmentId)
                         .enqueue(new Callback<ResponseBody>() {
 
                             @Override
@@ -335,16 +334,10 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        showBackArrow();
-
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ISSUE_ID)) {
-            final int issueId = savedInstanceState.getInt(ARG_ISSUE_ID);
-
-            fetchIssue(issueId);
+            fetchIssue(savedInstanceState.getInt(ARG_ISSUE_ID));
         } else if (getArguments() != null && getArguments().containsKey(ARG_ISSUE_ID)) {
-            final int issueId = getArguments().getInt(ARG_ISSUE_ID);
-
-            fetchIssue(issueId);
+            fetchIssue(getArguments().getInt(ARG_ISSUE_ID));
         }
     }
 
@@ -474,8 +467,6 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
         try {
             mUnbinder.unbind();
-
-            hideBackArrow();
         } catch (Exception e) {
             //
         }
@@ -499,8 +490,8 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
         public void onBindViewHolder(AttachmentViewHolder holder, int position) {
             final Attachment attachment = attachments.get(position);
 
-            holder.name.setText(new AttachmentSpannable(getContext(), attachment));
-            holder.remove.setOnClickListener(new View.OnClickListener() {
+            holder.mTvName.setText(new AttachmentSpannable(getContext(), attachment));
+            holder.mBtRemove.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -520,17 +511,17 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     static class AttachmentViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.name)
-        TextView name;
+        TextView mTvName;
 
         @BindView(R.id.remove_attachment)
-        ImageButton remove;
+        ImageButton mBtRemove;
 
-        public AttachmentViewHolder(View itemView) {
+        AttachmentViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
 
-            name.setMovementMethod(LinkMovementMethod.getInstance());
+            mTvName.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
     }
@@ -729,18 +720,21 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
 
     }
 
-    private static class HistoryRecordHolder extends RecyclerView.ViewHolder {
+    static class HistoryRecordHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.creator_avatar)
         ImageView avatar;
+
+        @BindView(R.id.title)
         TextView title;
+
+        @BindView(R.id.notes)
         TextView notes;
 
-        public HistoryRecordHolder(View itemView) {
+        HistoryRecordHolder(View itemView) {
             super(itemView);
 
-            avatar = (ImageView) itemView.findViewById(R.id.creator_avatar);
-            title = (TextView) itemView.findViewById(R.id.title);
-            notes = (TextView) itemView.findViewById(R.id.notes);
+            ButterKnife.bind(this, itemView);
         }
 
     }

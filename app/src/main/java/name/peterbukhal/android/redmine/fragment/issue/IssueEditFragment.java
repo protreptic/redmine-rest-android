@@ -25,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public final class EditIssueFragment extends AbsFragment {
+public final class IssueEditFragment extends AbsFragment {
 
     public static final String TAG_EDIT_ISSUE = "fragment_tag_edit_issue";
     public static final String ARG_ISSUE_ID = "arg_issue_id";
@@ -34,7 +34,7 @@ public final class EditIssueFragment extends AbsFragment {
         final Bundle arguments = new Bundle();
         arguments.putInt(ARG_ISSUE_ID, issueId);
 
-        Fragment fragment = new EditIssueFragment();
+        Fragment fragment = new IssueEditFragment();
         fragment.setArguments(arguments);
 
         return fragment;
@@ -49,7 +49,7 @@ public final class EditIssueFragment extends AbsFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.m_edit_issue, menu);
+        inflater.inflate(R.menu.m_issue_edit, menu);
     }
 
     @Override
@@ -113,7 +113,6 @@ public final class EditIssueFragment extends AbsFragment {
         super.onActivityCreated(savedInstanceState);
 
         setTitle(getString(R.string.edit));
-        showBackArrow();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ISSUE_ID)) {
             mIssue = new Issue();
@@ -130,8 +129,6 @@ public final class EditIssueFragment extends AbsFragment {
 
         try {
             mUnbinder.unbind();
-
-            hideBackArrow();
         } catch (Exception e) {
             //
         }

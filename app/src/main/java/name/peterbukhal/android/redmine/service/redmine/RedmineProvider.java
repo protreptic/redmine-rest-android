@@ -11,7 +11,7 @@ import name.peterbukhal.android.redmine.realm.CustomField;
 import name.peterbukhal.android.redmine.realm.Issue;
 import name.peterbukhal.android.redmine.realm.Priority;
 import name.peterbukhal.android.redmine.realm.Project;
-import name.peterbukhal.android.redmine.realm.Status;
+import name.peterbukhal.android.redmine.realm.StatusRealm;
 import name.peterbukhal.android.redmine.realm.Tracker;
 import name.peterbukhal.android.redmine.realm.User;
 import name.peterbukhal.android.redmine.realm.deserializer.AuthorDeserializer;
@@ -67,7 +67,7 @@ public final class RedmineProvider {
                                         .registerTypeAdapter(CustomField.class, new CustomFieldDeserializer())
                                         .registerTypeAdapter(Author.class, new AuthorDeserializer())
                                         .registerTypeAdapter(Priority.class, new PriorityDeserializer())
-                                        .registerTypeAdapter(Status.class, new StatusDeserializer())
+                                        .registerTypeAdapter(StatusRealm.class, new StatusDeserializer())
                                         .registerTypeAdapter(Tracker.class, new TrackerDeserializer())
                                         .registerTypeAdapter(Project.class, new ProjectDeserializer())
                                         .registerTypeAdapter(Issue.class, new IssueDeserializer())
