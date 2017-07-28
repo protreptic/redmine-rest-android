@@ -66,7 +66,7 @@ public final class RedmineApplication extends Application {
                         .build());
     }
 
-    private void initFabric(final Context context) {
+    private void initFabric(Context context) {
         Fabric.with(context, new Crashlytics(), new Answers());
     }
 

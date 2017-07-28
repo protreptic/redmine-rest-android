@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 
 import java.lang.ref.WeakReference;
 
+import name.peterbukhal.android.redmine.BuildConfig;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.realm.Author;
 import name.peterbukhal.android.redmine.realm.CustomField;
@@ -47,6 +48,7 @@ public final class RedmineProvider {
 
         sRedmine = new Retrofit.Builder()
                 .baseUrl(context.get().getString(R.string.redmine))
+                .validateEagerly(BuildConfig.DEBUG)
                 .client(new OkHttpClient.Builder()
                         .authenticator(new RedmineAuthenticator())
                         .addInterceptor(new RedmineAuthenticatorInterceptor())

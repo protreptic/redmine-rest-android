@@ -304,9 +304,6 @@ public final class IssueFragment extends AbsFragment implements SwipeRefreshLayo
     @BindView(R.id.watchers)
     RecyclerView mRvWatchers;
 
-    @BindView(R.id.source_code)
-    SourceCodeView sourceCodeView;
-
     private Unbinder mUnbinder;
 
     @Nullable
