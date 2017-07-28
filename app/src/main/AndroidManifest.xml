@@ -18,7 +18,11 @@
         android:theme="@style/Redmine"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".activity.LauncherActivity">
+        <activity
+            android:name=".activity.LauncherActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,11 +30,20 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.LoginActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name=".util.ContextProvider"
+            android:authorities="context-provider"
+            android:exported="false" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

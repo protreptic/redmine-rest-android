@@ -46,7 +46,7 @@ public final class RedmineApplication extends Application {
         initPicasso(this);
         initYodaTime(this);
 
-        RedmineProvider.init(this, getString(R.string.redmine));
+        RedmineProvider.init();
     }
 
     private void initRealm(Context context) {

@@ -3,9 +3,9 @@
     <string name="redmine">https://redmine.doctoroncall.ru</string>
     <string name="account_type">org.redmine.account</string>
     <string name="issue_no">#%1$d</string>
-    <string name="my_issues">Мои задачи</string>
-    <string name="watched_issues">Отслеживаемые задачи</string>
-    <string name="created_by_me_issues">Созданные задачи</string>
+    <string name="issues_assigned_to_me">Назначенные мне</string>
+    <string name="watched_issues">Отслеживаемые мной</string>
+    <string name="created_by_me_issues">Созданные мной</string>
     <string name="not_watched">Не следить</string>
     <string name="user">Пользователь</string>
 </resources>

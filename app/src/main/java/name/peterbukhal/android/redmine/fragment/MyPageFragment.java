@@ -50,7 +50,7 @@ public final class MyPageFragment extends AbsFragment {
         if (savedInstanceState == null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_content, IssuesFragment.newInstance(getString(R.string.my_issues), ASSIGNED_TO_ME), TAG_ISSUES + 1)
+                    .add(R.id.fragment_content, IssuesFragment.newInstance(getString(R.string.issues_assigned_to_me), ASSIGNED_TO_ME), TAG_ISSUES + 1)
                     .add(R.id.fragment_content, IssuesFragment.newInstance(getString(R.string.watched_issues), WATCHED_BY_ME), TAG_ISSUES + 2)
                     .add(R.id.fragment_content, IssuesFragment.newInstance(getString(R.string.created_by_me_issues), CREATED_BY_ME), TAG_ISSUES + 3)
                     .commitNow();
