@@ -3,6 +3,7 @@ package name.peterbukhal.android.redmine.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import butterknife.BindView;
@@ -27,6 +28,9 @@ public final class LoginActivity extends AppCompatActivity {
     @BindView(R.id.password)
     EditText mEtPassword;
 
+    @BindView(R.id.submit)
+    Button mBtSubmit;
+
     private Unbinder mUnbinder;
 
     private String mServer;
@@ -41,8 +45,7 @@ public final class LoginActivity extends AppCompatActivity {
 
         mUnbinder = ButterKnife.bind(this);
 
-        findViewById(R.id.submit)
-                .setOnClickListener(new View.OnClickListener() {
+        mBtSubmit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
