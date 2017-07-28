@@ -41,7 +41,8 @@ public final class LoginActivity extends AppCompatActivity {
 
         mUnbinder = ButterKnife.bind(this);
 
-        findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.submit)
+                .setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
