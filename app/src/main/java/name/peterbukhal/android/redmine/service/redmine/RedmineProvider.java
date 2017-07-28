@@ -78,7 +78,7 @@ public final class RedmineProvider {
 
     public static Redmine provide() {
         if (sRedmine == null) {
-            throw new RuntimeException("Not initialized!");
+            throw new RuntimeException("Redmine not initialized!");
         }
 
         return sRedmine;

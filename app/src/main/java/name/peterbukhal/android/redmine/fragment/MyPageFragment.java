@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import name.peterbukhal.android.redmine.R;
-import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
+import name.peterbukhal.android.redmine.fragment.abs.AbsFragment;
 import name.peterbukhal.android.redmine.fragment.issue.IssuesFragment;
 
 import static name.peterbukhal.android.redmine.fragment.issue.IssuesFragment.TAG_ISSUES;

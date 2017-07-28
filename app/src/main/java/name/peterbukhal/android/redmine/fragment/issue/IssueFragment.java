@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
 import name.peterbukhal.android.redmine.dialog.ConfirmationDialog;
-import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
+import name.peterbukhal.android.redmine.fragment.abs.AbsFragment;
 import name.peterbukhal.android.redmine.service.redmine.model.Attachment;
 import name.peterbukhal.android.redmine.service.redmine.model.Author;
 import name.peterbukhal.android.redmine.service.redmine.model.HistoryRecord;

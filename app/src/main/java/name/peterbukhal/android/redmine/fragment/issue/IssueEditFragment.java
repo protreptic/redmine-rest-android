@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
-import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
+import name.peterbukhal.android.redmine.fragment.abs.AbsFragment;
 import name.peterbukhal.android.redmine.service.redmine.RedmineProvider;
 import name.peterbukhal.android.redmine.service.redmine.model.Issue;
 import name.peterbukhal.android.redmine.service.redmine.request.EditIssueRequest;

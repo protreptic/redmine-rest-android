@@ -1,4 +1,4 @@
-package name.peterbukhal.android.redmine.fragment.base;
+package name.peterbukhal.android.redmine.fragment.abs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

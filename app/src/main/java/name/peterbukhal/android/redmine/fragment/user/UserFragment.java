@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import name.peterbukhal.android.redmine.R;
-import name.peterbukhal.android.redmine.fragment.base.AbsFragment;
+import name.peterbukhal.android.redmine.fragment.abs.AbsFragment;
 import name.peterbukhal.android.redmine.service.redmine.model.User;
 import name.peterbukhal.android.redmine.service.redmine.response.UserResponse;
 import name.peterbukhal.android.redmine.util.RoundedTransformation;
